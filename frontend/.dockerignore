@@ -1,0 +1,22 @@
+# Ignore node_modules directory
+node_modules
+npm-debug.log
+yarn-error.log
+.pnpm-debug.log
+
+# Ignore build output (if already built locally)
+dist
+
+# Ignore local environment files
+.env.local
+.env.*.local
+
+# Ignore misc files
+.DS_Store
+*.log
+.vscode
+.idea
+
+# Ignore Dockerfile itself (optional)
+Dockerfile
+
