@@ -1,15 +1,22 @@
 version: "3.9"
 services:
- frontend:
-   build:
-     context: .
-     dockerfile: Dockerfile
-   container_name: frontend-app
-   restart: always
-   ports:
-     - 8080:5173
-   volumes:
-     - ../frontend:/opt/app
-     - /opt/app/node_modules
-   environment:
-     - VITE_APP_BACKEND_ADDRESS=http://localhost/api
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontend-app
+    restart: always
+    ports:
+      - 8080:5173
+    volumes:
+      - ../frontend:/opt/app
+      - /opt/app/node_modules
+    environment:
+      - VITE_APP_BACKEND_ADDRESS=http://localhost/api
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
