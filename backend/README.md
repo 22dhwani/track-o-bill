@@ -10,13 +10,13 @@ Make sure you have the following installed on your machine:
 
 ## Setup Instructions
 
-### 1. Change directory to frontend
+### 1. Change directory to backend
 
 ```bash
 cd track-o-bill/backend
 ```
 
-### 2. Build and Run the Frontend Docker Container
+### 2. Build and Run the Backend Docker Container
 
 To build and run the frontend in a Docker container, use the following command in the `frontend` directory where the `docker-compose.yml` file is located:
 
@@ -30,7 +30,7 @@ This will:
 - Install all the necessary dependencies mentioned in `backend/requirements.txt.`
 - Expose the Django app on port `8000` on your local machine.
 
-### 3. Access the Frontend on Your Local Machine
+### 3. Access the Backend on Your Local Machine
 
 Once the container is running, you can access the Django app by navigating to the following URL in your browser:
 
@@ -47,6 +47,12 @@ docker-compose down
 ```
 
 This will stop and remove the running containers.
+
+### 5. Get terminal Access of the container
+
+```bash
+docker exec -it <name of container> /bin/bash
+```
 
 ## Troubleshooting
 
