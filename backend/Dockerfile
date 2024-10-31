@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
 COPY . /app/
+WORKDIR /app
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
@@ -20,5 +21,5 @@ EXPOSE 8000
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Run database migrations and start the Django server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+COPY ./entrypoint.sh .
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]

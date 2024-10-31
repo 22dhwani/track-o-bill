@@ -1,17 +1,17 @@
 version: "3.8"
 
 services:
-  db:
-    image: postgres:13
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mydb
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app_network
+  # db:
+  #   image: postgres:13
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: mydb
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - app_network
 
   web:
     build: .
@@ -20,15 +20,8 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/mydb
-    networks:
-      - app_network
+#     networks:
+#       - app_network
 
-networks:
-  app_network:
-
-volumes:
-  postgres_data:
+# networks:
+#   app_network:

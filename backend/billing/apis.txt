@@ -1,0 +1,25 @@
+User Auth and Stuff:
+/register
+/login
+/logout
+
+User Page once Logged in:
+/user -> give all the groups user has joined in
+
+Group Functions: (Authentication required)
+/create_group
+/delete_group
+/rename_group
+/join_group
+/users_group
+/leave_group
+
+Transactions
+/add_transaction
+/remove_transaction
+/edit_transaction
+/list_all_transactions
+
+Settle Up 
+/settle_up -> to show that which user owns which user how much in a particular group 
+/settle_up/user_id -> to settle up transactions between users by adding a reverse transaction in owing table
