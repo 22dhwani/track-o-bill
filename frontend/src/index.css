@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7983a1;
+  border-radius: 20px;
+}
+
+.libre-bold {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.libre {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+}
+.font-roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+}
+.font-roboto-semibold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+}
+
+.font-roboto-light {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
