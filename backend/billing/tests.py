@@ -1,9 +1,6 @@
 import os
 import django
-from .models import *
-from django.db.models import Q  # Import Q object to perform OR queries
-from django.db.models import Avg,Sum
-from django.contrib.auth.models import User
+from models import *
 from django.contrib.auth import get_user_model
 
 # Set up Django environment

@@ -76,15 +76,16 @@ class Bill(models.Model):
 # Transaction Model
 class Transaction(models.Model):
     id = models.AutoField(primary_key=True)
-    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="transactions")  # reference to bill
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="bill",blank=True)  # reference to bill
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="transactions")  # Foreign key to Group
-    user_payer = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="owned_transactions")  # The user who paid
+    payer = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="owned_transactions")  # The user who paid
+    transaction_adder = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="transaction_adder",blank=True)  # The user who added the transaction
     users_involved = models.JSONField(blank=True, default=list) 
+    amount_users_own = models.JSONField(blank=True, default=list) # maps to user_involved
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)  # Total amount of the transaction
-    owner_amount = models.JSONField(blank=True, default=list) # Amount the owner paid
 
     def __str__(self):
-        return f"Transaction {self.id} - Group {self.group.name} - Owner: {self.user_payer.username}"
+        return f"Transaction {self.id} - Group {self.group.name} - Added by: {self.transaction_adder.username}"
 
 # Owing Model
 class Owing(models.Model):
@@ -93,6 +94,6 @@ class Owing(models.Model):
     owner = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="owed_transactions")  # The person who is owed
     borrower = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="borrowed_transactions")  # The person who owes
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount owed
-
+    is_settled = models.BooleanField(default=False)
     def __str__(self):
-        return f"Owing {self.id} - {self.borrower.username} owes {self.owner.username} {self.amount}"
+        return f"Owing {self.id} - Transaction {self.transaction.id} - {self.borrower.username} owes {self.owner.username} {self.amount}"

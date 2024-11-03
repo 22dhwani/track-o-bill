@@ -14,4 +14,8 @@ urlpatterns = [
 	path('rename_group', RenameGroupView.as_view(), name='rename_group'),
 	path('leave_group', LeaveGroupView.as_view(), name='leave_group'),
 	path('delete_group', DeleteGroupView.as_view(), name='leave_group'),
+
+	path('add_transaction', AddTransactionView.as_view(), name='add_transaction'),
+	path('remove_transaction', RemoveTransactionView.as_view(), name='remove_transaction'),
+	path('list_all_transactions', ListAllTransactionsView.as_view(), name='list_all_transactions'),
 ]

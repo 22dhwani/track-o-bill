@@ -200,3 +200,128 @@ class DeleteGroupView(APIView):
                 return JsonResponse({"detail":"Users are not settled up, users needs to settle up first, Group Delete Failed! !"}, status = 400)
         else:
             return JsonResponse({"detail":"please provide a integer group_id variable"}, status = 404)
+
+# /remove_transaction
+# /edit_transaction
+# /all_transactions
+
+# checks if users are valid and are all in the group
+def are_users_in_group(users_involved,group,transaction_adder):    
+    
+    for i in users_involved:
+        if i not in group.users:
+            return f"User {i} not in group."
+
+    if transaction_adder not in group.users:
+        return f"User {transaction_adder} not in group."
+    return True
+
+# add transactions
+class AddTransactionView(APIView): 
+    permission_classes = [permissions.IsAuthenticated,]
+    authentication_classes = [TokenAuthentication]
+    
+    def post(self,request,format=None):
+        form = AddTransactionForm(request.data)
+        if form.is_valid():
+            
+            # fields
+            users_involved = form.cleaned_data['users_involved']
+            amount_users_own = form.cleaned_data['amount_users_own']
+            
+            # if not list send error
+            if type(users_involved) is not list or type(amount_users_own) is not list:
+                return JsonResponse({"detail":"give users_involved, amount_users_own as list"}, status = 400)
+            elif len(users_involved) != len(amount_users_own):
+                return JsonResponse({"detail":"give users_involved, amount_users_own as list of same length"}, status = 400)
+                        
+            transaction = Transaction()
+            transaction.group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
+            areUsersValid = are_users_in_group(users_involved,transaction.group,form.cleaned_data['transaction_adder'])
+            
+            # if users are not in group, remove them
+            if type(areUsersValid) == str:
+                return JsonResponse({"detail":areUsersValid}, status = 400)
+                
+            transaction.bill = get_object_or_404(Bill,id= 1) # TODO: Add bill_id later from form.cleaned_data['bill_id']
+            payer_id = form.cleaned_data['payer_id']
+            transaction.payer = get_object_or_404(AppUser,user_id= payer_id)
+            
+            transaction.transaction_adder = get_object_or_404(AppUser,user_id= form.cleaned_data['transaction_adder'])
+            transaction.users_involved = users_involved
+            transaction.amount_users_own = amount_users_own
+            transaction.total_amount = form.cleaned_data['total_amount']  # Total amount of the transaction
+            
+            transaction.save()
+            
+            # for each user involved, make a owing row
+            for index,value in enumerate(users_involved):
+                if payer_id != value:
+                    owing = Owing()
+                    owing.transaction = transaction
+                    owing.owner = transaction.payer
+                    owing.borrower = get_object_or_404(AppUser,user_id = value)
+                    owing.amount = amount_users_own[index]
+                    owing.save()
+            
+            return JsonResponse({"detail":"Transaction Added"}, status = 200)
+        else:
+            return JsonResponse({"detail":"Please Provide bill_id, group_id, payer_id, transaction_adder as integers, users_involved, amount_users_own as lists and total_amount as a decimal field"}, status = 404)
+
+# remove transactions
+class RemoveTransactionView(APIView): 
+    permission_classes = [permissions.IsAuthenticated,]
+    authentication_classes = [TokenAuthentication]
+    
+    def post(self,request,format=None):
+        form = RemoveTransactionForm(request.data)
+        
+        if form.is_valid():
+            transaction = get_object_or_404(Transaction,id=form.cleaned_data['transaction_id'])
+            transaction.bill.delete()
+            transaction.delete() 
+            return JsonResponse({"detail":"Transaction Removed"}, status = 200)
+        else:
+            return JsonResponse({"detail":"Please Provide transaction_id as integer"}, status = 404)
+
+# list alll transactions
+class ListAllTransactionsView(APIView): 
+    permission_classes = [permissions.IsAuthenticated,]
+    authentication_classes = [TokenAuthentication]
+    
+    def get(self,request,format=None):
+        form = GroupForm(request.data)
+        
+        if form.is_valid():
+            
+            group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
+            
+            # get all transactions of a group
+            all_transactions = Transaction.objects.filter(group=group)
+            
+            all_transactions_data = []
+            
+            for transaction in all_transactions:
+                # get names of all users
+                users_involved = []
+                for i in transaction.users_involved:
+                    username = get_object_or_404(AppUser,user_id=i).username # get username of involved user
+                    users_involved.append(username)
+                
+                data = {
+                    "transaction_id":transaction.id,
+                    "bill_id":transaction.bill.id,
+                    "payer":transaction.payer.username,
+                    "payer_id":transaction.payer.user_id,
+                    "transaction_adder_id":transaction.transaction_adder.user_id,
+                    "transaction_adder":transaction.transaction_adder.username,
+                    "users_involved_id": transaction.users_involved,
+                    "users_involved":users_involved,
+                    "amount_users_own":transaction.amount_users_own,
+                    "total_amount":transaction.total_amount,
+                }
+                all_transactions_data.append(data)
+                
+            return JsonResponse({"detail":all_transactions_data}, status = 200)
+        else:
+            return JsonResponse({"detail":"Please Provide group_id as integer"}, status = 404)
