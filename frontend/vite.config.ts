@@ -11,5 +11,10 @@ export default defineConfig({
     hmr: {
       clientPort: 8080
     }
+  },
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
   }
 })
