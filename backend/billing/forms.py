@@ -14,6 +14,19 @@ class AddTransactionForm(forms.Form):
     users_involved = forms.JSONField()
     amount_users_own = forms.JSONField()
     total_amount = forms.DecimalField()  # Total amount of the transaction
+    name = forms.CharField(max_length=255)
+
+class EditTransactionForm(forms.Form):
+    transaction_id = forms.IntegerField() # The user who added the transaction
+    payer_id = forms.IntegerField() # The user who added the transaction
+    users_involved = forms.JSONField()
+    amount_users_own = forms.JSONField()
+    total_amount = forms.DecimalField()  # Total amount of the transaction
+    name = forms.CharField(max_length=255)
     
 class RemoveTransactionForm(forms.Form):
     transaction_id = forms.IntegerField()
+    
+class SettleUpForm(forms.Form):
+    group_id = forms.IntegerField()
+    user_id = forms.IntegerField()
