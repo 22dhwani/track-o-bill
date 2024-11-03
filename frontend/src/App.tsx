@@ -1,21 +1,14 @@
-import { useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
+import Home from "./pages/Home";
 
 function App(): JSX.Element {
-  const [count, setCount] = useState<number>(0);
-
   return (
     <>
-      <h1>Heading</h1>
-      <div className="card">
-        <button onClick={() => setCount((prevCount: number) => prevCount + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">This should work</p>
+      <Routes>
+        <Route path="/" element={<Navigate replace to="/home" />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
     </>
   );
 }
