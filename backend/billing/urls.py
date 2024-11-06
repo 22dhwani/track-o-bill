@@ -6,6 +6,7 @@ urlpatterns = [
 	path('login', UserLogin.as_view(), name='login'),
 	path('logout', UserLogout.as_view(), name='logout'),
 	path('user', UserView.as_view(), name='user'),
+	path('user/<int:group_id>', GroupMembersView.as_view(), name='user'),
 
 	path('create_group', CreateGroupView.as_view(), name='create_group'),
 	path('join_group', JoinGroupView.as_view(), name='join_group'),

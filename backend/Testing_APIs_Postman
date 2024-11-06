@@ -16,7 +16,7 @@
 					"formdata": [
 						{
 							"key": "email",
-							"value": "10@100.com",
+							"value": "10@10111.com",
 							"type": "text"
 						},
 						{
@@ -26,7 +26,7 @@
 						},
 						{
 							"key": "username",
-							"value": "Smit",
+							"value": "Durva",
 							"type": "text"
 						}
 					]
@@ -54,7 +54,7 @@
 					"formdata": [
 						{
 							"key": "email",
-							"value": "10@101.com",
+							"value": "10@10.com",
 							"type": "text"
 						},
 						{
@@ -84,32 +84,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "email",
-							"value": "10@10.com",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "1234567890",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "username",
-							"value": "tanmay",
-							"type": "text",
-							"disabled": true
-						}
-					]
+					"formdata": []
 				},
 				"url": {
 					"raw": "localhost:8000/logout",
@@ -134,7 +115,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token 3}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -156,13 +137,45 @@
 			"response": []
 		},
 		{
+			"name": "/user/group_id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token 8}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8000/user/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/create_group",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -205,12 +218,12 @@
 					"formdata": [
 						{
 							"key": "group_name",
-							"value": "806 Riversisde",
+							"value": "Partington Ave",
 							"type": "text"
 						},
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -235,7 +248,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token 5}}",
+						"value": "{{Token}}",
 						"type": "text"
 					}
 				],
@@ -244,7 +257,7 @@
 					"formdata": [
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -269,7 +282,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token 5}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -278,7 +291,7 @@
 					"formdata": [
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -337,7 +350,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -351,37 +364,37 @@
 						},
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						},
 						{
 							"key": "payer_id",
-							"value": "3",
+							"value": "6",
 							"type": "text"
 						},
 						{
 							"key": "transaction_adder",
-							"value": "3",
+							"value": "6",
 							"type": "text"
 						},
 						{
 							"key": "users_involved",
-							"value": "[2,3,4]",
+							"value": "[6,7]",
 							"type": "text"
 						},
 						{
 							"key": "amount_users_own",
-							"value": "[3.34,3.33,3.33]",
+							"value": "[3,3]",
 							"type": "text"
 						},
 						{
 							"key": "total_amount",
-							"value": "10",
+							"value": "6",
 							"type": "text"
 						},
 						{
 							"key": "name",
-							"value": "bread",
+							"value": "Kurkure",
 							"type": "text"
 						}
 					]
@@ -415,17 +428,17 @@
 					"formdata": [
 						{
 							"key": "transaction_id",
-							"value": "16",
+							"value": "19",
 							"type": "text"
 						},
 						{
 							"key": "payer_id",
-							"value": "2",
+							"value": "6",
 							"type": "text"
 						},
 						{
 							"key": "users_involved",
-							"value": "[3,4]",
+							"value": "[7,8]",
 							"type": "text"
 						},
 						{
@@ -440,7 +453,7 @@
 						},
 						{
 							"key": "name",
-							"value": "milk",
+							"value": "Sauce 2",
 							"type": "text"
 						}
 					]
@@ -502,7 +515,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 7}}",
 						"type": "text"
 					}
 				],
@@ -511,7 +524,7 @@
 					"formdata": [
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -539,7 +552,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token 3}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -548,7 +561,7 @@
 					"formdata": [
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -573,7 +586,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token 4}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -582,12 +595,12 @@
 					"formdata": [
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						},
 						{
 							"key": "user_id",
-							"value": "2",
+							"value": "8",
 							"type": "text"
 						}
 					]

@@ -4,7 +4,8 @@ POST /login
 POST /logout
 
 POST User Page once Logged in:
-GET /user -> give all the groups user has joined in
+GET /user -> give user information
+GET /user/group_id -> give all the groups user has joined in except for Authenticated user
 
 Group Functions: (Authentication required)
 POST /create_group

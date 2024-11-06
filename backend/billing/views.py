@@ -77,6 +77,26 @@ class UserView(APIView):
         }
         return Response(data, status=status.HTTP_200_OK)
 
+# get all group members
+class GroupMembersView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    # get method
+    def get(self, request,group_id):
+
+        user = request.user
+        if group_id not in user.groups_joined:
+                return JsonResponse({"detail":"User should be in group"}, status = 404)
+
+        groups = get_object_or_404(Group,id=group_id)
+            
+        data = {
+            "users_id":[get_object_or_404(AppUser,user_id = i).user_id for i in groups.users if i != request.user.user_id],
+            "users":[get_object_or_404(AppUser,user_id = i).username for i in groups.users if i != request.user.user_id]
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
 # create group
 class CreateGroupView(APIView): 
     permission_classes = [permissions.IsAuthenticated,]
@@ -317,10 +337,15 @@ class ListAllTransactionsView(APIView):
         
         if form.is_valid():
             
-            group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
+            group_id = form.cleaned_data['group_id']
+            group = get_object_or_404(Group,id=group_id)
+            
+            user = request.user
+            if group_id not in user.groups_joined:
+                return JsonResponse({"detail":"User should be in group"}, status = 404)
             
             # get all transactions of a group
-            all_transactions = Transaction.objects.filter(group=group)
+            all_transactions = Transaction.objects.filter(group=group).order_by('id')
             
             all_transactions_data = []
             
@@ -343,7 +368,7 @@ class ListAllTransactionsView(APIView):
                     "users_involved":users_involved,
                     "amount_users_own":transaction.amount_users_own,
                     "total_amount":transaction.total_amount,
-                    "date":transaction.created_at.date()
+                    "date":transaction.created_at
                 }
                 all_transactions_data.append(data)
                 
@@ -498,8 +523,13 @@ class SettleUpView(APIView):
         if form.is_valid():
             this_user = request.user.user_id
             other_user = form.cleaned_data['user_id']
-            group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
-        
+            group_id = form.cleaned_data['group_id']
+            group = get_object_or_404(Group,id=group_id)
+
+            user = request.user
+            if group_id not in user.groups_joined:
+                return JsonResponse({"detail":"User should be in group"}, status = 404)
+            
             if this_user == other_user:
                 return JsonResponse({"detail":"You can't settle up with yourself"}, status = 400)
         
