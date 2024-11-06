@@ -32,6 +32,8 @@ Navigate to the `frontend` directory and follow the instructions in the `fronten
 
 ### 3. Setting Up the Backend
 
+Navigate to the `backend` directory and follow the instructions in the `backend/README.md` to deploy the backend application.
+
 ## Contributing
 
 Contributions are welcome! Please follow the standard Git workflow:

@@ -27,9 +27,3 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError("user not found")
         return user
-
-# user serializer
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ("user_id","username","groups_joined")
