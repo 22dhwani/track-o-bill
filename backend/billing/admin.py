@@ -5,5 +5,5 @@ from .models import *
 admin.site.register(Group)
 admin.site.register(Bill)
 admin.site.register(Transaction)
-admin.site.register(Owing)
+admin.site.register(Owning)
 admin.site.register(AppUser)

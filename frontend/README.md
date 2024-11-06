@@ -5,6 +5,7 @@ This guide will help you deploy the frontend of the project using Docker and Doc
 ## Prerequisites
 
 Make sure you have the following installed on your machine:
+
 - [Docker](https://docs.docker.com/get-docker/)
 
 ## Setup Instructions
@@ -24,6 +25,7 @@ docker-compose up --build -d
 ```
 
 This will:
+
 - Build the Docker image for the frontend based on the `Dockerfile`.
 - Install all the necessary dependencies.
 - Expose the React app on port `8080` on your local machine.
@@ -47,6 +49,12 @@ docker-compose down
 ```
 
 This will stop and remove the running containers.
+
+### 5. Get terminal Access of the container
+
+```bash
+docker exec -it <name of container> /bin/bash
+```
 
 ## Notes on Development
 
