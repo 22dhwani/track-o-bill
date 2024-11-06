@@ -16,7 +16,7 @@
 					"formdata": [
 						{
 							"key": "email",
-							"value": "10@105.com",
+							"value": "10@10111.com",
 							"type": "text"
 						},
 						{
@@ -26,7 +26,7 @@
 						},
 						{
 							"key": "username",
-							"value": "tanmayd",
+							"value": "Durva",
 							"type": "text"
 						}
 					]
@@ -54,7 +54,7 @@
 					"formdata": [
 						{
 							"key": "email",
-							"value": "10@105.com",
+							"value": "10@10.com",
 							"type": "text"
 						},
 						{
@@ -84,32 +84,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "email",
-							"value": "10@10.com",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "1234567890",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "username",
-							"value": "tanmay",
-							"type": "text",
-							"disabled": true
-						}
-					]
+					"formdata": []
 				},
 				"url": {
 					"raw": "localhost:8000/logout",
@@ -134,7 +115,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -156,13 +137,45 @@
 			"response": []
 		},
 		{
+			"name": "/user/group_id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token 8}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8000/user/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/create_group",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -205,12 +218,12 @@
 					"formdata": [
 						{
 							"key": "group_name",
-							"value": "806 Riversisde",
+							"value": "Partington Ave",
 							"type": "text"
 						},
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -244,7 +257,7 @@
 					"formdata": [
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -269,7 +282,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{Token}}",
+						"value": "{{Token 6}}",
 						"type": "text"
 					}
 				],
@@ -278,7 +291,7 @@
 					"formdata": [
 						{
 							"key": "group_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -325,6 +338,281 @@
 					"port": "8000",
 					"path": [
 						"delete_group"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/add_transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token 6}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "bill_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "group_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "payer_id",
+							"value": "6",
+							"type": "text"
+						},
+						{
+							"key": "transaction_adder",
+							"value": "6",
+							"type": "text"
+						},
+						{
+							"key": "users_involved",
+							"value": "[6,7]",
+							"type": "text"
+						},
+						{
+							"key": "amount_users_own",
+							"value": "[3,3]",
+							"type": "text"
+						},
+						{
+							"key": "total_amount",
+							"value": "6",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Kurkure",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/add_transaction",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"add_transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/edit_transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "transaction_id",
+							"value": "19",
+							"type": "text"
+						},
+						{
+							"key": "payer_id",
+							"value": "6",
+							"type": "text"
+						},
+						{
+							"key": "users_involved",
+							"value": "[7,8]",
+							"type": "text"
+						},
+						{
+							"key": "amount_users_own",
+							"value": "[5,5]",
+							"type": "text"
+						},
+						{
+							"key": "total_amount",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Sauce 2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/edit_transaction",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"edit_transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/remove_transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "transaction_id",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/remove_transaction",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"remove_transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/list_all_transactions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token 7}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "group_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/list_all_transactions",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"list_all_transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settle_up",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token 6}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "group_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/settle_up",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"settle_up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settle_up",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token 6}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "group_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/settle_up",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"settle_up"
 					]
 				}
 			},

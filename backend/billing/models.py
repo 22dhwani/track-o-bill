@@ -66,7 +66,6 @@ class Group(models.Model):
 class Bill(models.Model):
     id = models.AutoField(primary_key=True)
     image = models.ImageField(upload_to="bills/", null=True, blank=True)  # Store the image of the bill
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set the creation date
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount of the bill
     tax = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -76,23 +75,26 @@ class Bill(models.Model):
 # Transaction Model
 class Transaction(models.Model):
     id = models.AutoField(primary_key=True)
-    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="transactions")  # reference to bill
+    name = models.CharField(blank=True,default="as",max_length=255)
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="bill",blank=True)  # reference to bill
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="transactions")  # Foreign key to Group
-    user_payer = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="owned_transactions")  # The user who paid
+    payer = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="owned_transactions")  # The user who paid
+    transaction_adder = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="transaction_adder",blank=True)  # The user who added the transaction
     users_involved = models.JSONField(blank=True, default=list) 
+    amount_users_own = models.JSONField(blank=True, default=list) # maps to user_involved
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)  # Total amount of the transaction
-    owner_amount = models.JSONField(blank=True, default=list) # Amount the owner paid
-
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set the creation date
+    
     def __str__(self):
-        return f"Transaction {self.id} - Group {self.group.name} - Owner: {self.user_payer.username}"
+        return f"Transaction {self.id} - Group {self.group.name} - Added by: {self.transaction_adder.username} - Payed by: {self.payer.username}"
 
 # Owing Model
-class Owing(models.Model):
+class Owning(models.Model):
     id = models.AutoField(primary_key=True)
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name="owings")  # Foreign key to transaction
     owner = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="owed_transactions")  # The person who is owed
     borrower = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="borrowed_transactions")  # The person who owes
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount owed
-
+    is_settled = models.BooleanField(default=False)
     def __str__(self):
-        return f"Owing {self.id} - {self.borrower.username} owes {self.owner.username} {self.amount}"
+        return f"Owning {self.id} - Transaction {self.transaction.id} - {self.borrower.username} owes {self.owner.username} {self.amount}"
