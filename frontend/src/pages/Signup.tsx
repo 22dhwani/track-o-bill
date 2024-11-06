@@ -1,4 +1,27 @@
+import React, { useRef } from 'react'; 
+
 const Signup: React.FC = () => {
+    const formRef = useRef<HTMLFormElement>(null)
+    // Function to handle form submission
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault(); // Prevent default form submission
+      const formData = new FormData(event.currentTarget); // Get form data
+      const userInfo = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        terms: formData.get('terms'),
+      };
+      console.log(userInfo); // Log user info or handle it as needed
+
+      
+    // Clear the form fields
+    if (formRef.current) {
+      formRef.current.reset(); // Reset the form fields
+    }
+    };
+  
   return (
     <div className="max-h-screen border-4 lg:border-[20px] border-black bg-slate-900 flex flex-col items-center !overflow-hidden">
       <div className="flex h-screen p-10 gap-10  max-h-screen border rounded-2xl w-2/3 border-none">
@@ -29,45 +52,49 @@ const Signup: React.FC = () => {
               </a>
             </p>
 
-            <form className="space-y-4">
-              <div className="flex gap-4">
-                <input
-                  type="text"
-                  placeholder="First name"
-                  className="w-1/2 p-3 rounded bg-gray-800 text-white"
-                />
-                <input
-                  type="text"
-                  placeholder="Last name"
-                  className="w-1/2 p-3 rounded bg-gray-800 text-white"
-                />
-              </div>
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full p-3 rounded bg-gray-800 text-white"
-              />
-              <input
-                type="password"
-                placeholder="Enter your password"
-                className="w-full p-3 rounded bg-gray-800 text-white"
-              />
-              <div className="flex items-center mt-2">
-                <input type="checkbox" id="terms" className="mr-2" />
-                <label htmlFor="terms" className="text-gray-400">
-                  I agree to the{" "}
-                  <a href="#" className="text-purple-400">
-                    Terms & Conditions
-                  </a>
-                </label>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3 mt-4 bg-purple-600 rounded font-bold text-white"
-              >
-                Create account
-              </button>
-            </form>
+          <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}> {/* Added onSubmit event */}
+          <div className="flex gap-4">
+            <input
+              type="text"
+              name="firstName" // Added name attribute
+              placeholder="First name"
+              className="w-1/2 p-3 rounded bg-gray-800 text-white"
+            />
+            <input
+              type="text"
+              name="lastName" // Added name attribute
+              placeholder="Last name"
+              className="w-1/2 p-3 rounded bg-gray-800 text-white"
+            />
+          </div>
+          <input
+            type="email"
+            name="email" // Added name attribute
+            placeholder="Email"
+            className="w-full p-3 rounded bg-gray-800 text-white"
+          />
+          <input
+            type="password"
+            name="password" // Added name attribute
+            placeholder="Enter your password"
+            className="w-full p-3 rounded bg-gray-800 text-white"
+          />
+          <div className="flex items-center mt-2">
+            <input type="checkbox" id="terms" name="terms" className="mr-2" /> {/* Added name attribute */}
+            <label htmlFor="terms" className="text-gray-400">
+              I agree to the{" "}
+              <a href="#" className="text-purple-400">
+                Terms & Conditions
+              </a>
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="w-full py-3 mt-4 bg-purple-600 rounded font-bold text-white"
+          >
+            Create account
+          </button>
+        </form>
 
             <div className="mt-6 text-center text-gray-400">
               <p>Or register with</p>
