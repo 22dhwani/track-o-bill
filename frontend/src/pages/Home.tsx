@@ -2,30 +2,33 @@ import Footer from "../home/Footer";
 import HomeNavbar from "../home/HomeNavbar";
 import Man from "../../images/man.avif";
 import Women from "../../images/women.jpg";
+import { NavLink } from "react-router-dom";
 
 const Home: React.FC = () => {
   return (
-    <div className="lg:max-h-screen border-4 lg:border-t-[20px] lg:border-b-0 lg:border-x-[20px] border-black bg-white flex flex-col items-center !overflow-hidden">
+    <div className="lg:max-h-screen border-4 lg:border-t-[20px] lg:border-b-0 lg:border-x-[20px] border-black bg-slate-900  flex flex-col items-center !overflow-hidden">
       <HomeNavbar />
-      <main className="grid md:grid-cols-1 lg:grid-cols-6 items-center text-center px-6 xs:my-12 lg:my-6 gap-10">
+      <main className="grid md:grid-cols-1 lg:grid-cols-6 items-center text-center px-6 xs:my-12 lg:my-6 gap-10 ">
         {/* First Column: 4/6 width */}
         <div className="lg:col-span-4 flex flex-col items-center">
-          <h2 className="text-xl font-semibold text-black mb-1">
+          <h2 className="text-xl font-semibold text-white mb-1">
             🚀 INSTANT SPLIT
           </h2>
-          <h1 className="text-5xl font-bold text-black mb-4 libre-bold tracking-wide leading-snug">
+          <h1 className="text-5xl font-bold text-white mb-4 libre-bold tracking-wide leading-snug">
             Split & Share Expenses with{" "}
             <span className="text-green-600">Friends</span> and{" "}
             <span className="text-green-600">Family</span>
           </h1>
-          <p className="text-lg text-gray-700 max-w-2xl">
+          <p className="text-lg text-white max-w-2xl">
             Simplify group expenses effortlessly. Our user-friendly app makes
             bill splitting, expense tracking, and payments coordination
             seamless. Gain financial clarity and peace of mind with ShareSplits.
           </p>
-          <button className="bg-black text-white px-6 py-3 rounded-md mt-6 font-semibold">
-            Open a ShareSplits Account
-          </button>
+          <NavLink to="/dashboard">
+            <button className="bg-black text-white px-6 py-3 rounded-md mt-6 font-semibold">
+              Open a ShareSplits Account
+            </button>
+          </NavLink>
 
           <div className="flex flex-col items-center space-x-3 mt-8 gap-3">
             {/* Profile images placeholders */}
@@ -46,7 +49,7 @@ const Home: React.FC = () => {
                 className="w-10 h-10 rounded-full object-fit"
               />
             </div>
-            <p className="text-gray-700">
+            <p className="text-white">
               The best application to manage your Expenses in group
             </p>
           </div>
