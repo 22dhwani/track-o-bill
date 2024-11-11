@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import Heading from "./Heading";
 
 const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
-  const sideNavLinkClass = `bg-slate-900 -mt-10 xl:py-[3vh] lg:py-[2.8vh] text-black lg:flex    w-full  text-md flex-col font-normal lg:mt-0  h-screen xs:hidden  overflow-y-scroll !relative !overflow-x-hidden border-r-[0.3px] border-r-slate-200`;
+  const sideNavLinkClass = `bg-slate-900 -mt-10 xl:py-[3vh] lg:py-[2.8vh] text-black lg:flex    w-full  text-md flex-col font-normal lg:mt-0  h-screen xs:hidden  overflow-y-scroll !relative !overflow-x-hidden `;
   const location = useLocation();
   return (
     <div className={`${sideNavLinkClass}`}>

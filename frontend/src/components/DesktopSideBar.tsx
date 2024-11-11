@@ -2,6 +2,7 @@ import Button from "./Button";
 import SideNavLinks from "./DesktopSideNavLinks";
 import Heading from "./Heading";
 import Dollar from "../../images/dollar.svg";
+import Gif from "../../images/save.gif";
 
 const DesktopSideBar = (props: {
   isCollapse: boolean;
@@ -23,7 +24,7 @@ const DesktopSideBar = (props: {
         !props.isCollapse && props.isHover ? "!w-60" : "w-[5.187500000000001vw]"
       } ${props.isCollapse ? "!w-60" : "w-inherit"}`}
     >
-      <div className="lg:flex flex-row items-center xs:hidden py-3 border-b-[0.3px] border-b-slate-200 border-r-[0.3px] border-r-slate-200 3xl:h-[9.334316353887399vh]  2xl:h-[8.934316353887399vh] xl:h-[9.434316353887399vh] lg:h-[10.534316353887399vh] xs:h-[9.434316353887399vh] justify-between px-1.5 libre-bold ">
+      <div className="lg:flex flex-row items-center xs:hidden py-3 border-none 3xl:h-[12.334316353887399vh]  2xl:h-[11.934316353887399vh] xl:h-[12.434316353887399vh] lg:h-[12.534316353887399vh] xs:h-[9.434316353887399vh] justify-between px-1.5 libre-bold ">
         {props.isCollapse && (
           <div className="flex ">
             <img src={Dollar} alt="Dollar icon" />
@@ -52,6 +53,9 @@ const DesktopSideBar = (props: {
         </Button>
       </div>
       <SideNavLinks isCollapse={props.isCollapse} isHover={props.isHover} />
+      <div className="sticky bottom-0">
+        <img src={Gif} alt="Save animation" />
+      </div>
     </div>
   );
 };
