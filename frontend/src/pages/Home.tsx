@@ -5,7 +5,7 @@ import Women from "../../images/women.jpg";
 
 const Home: React.FC = () => {
   return (
-    <div className="max-h-screen border-4 lg:border-t-[20px] lg:border-b-0 lg:border-x-[20px] border-black bg-white flex flex-col items-center !overflow-hidden">
+    <div className="lg:max-h-screen border-4 lg:border-t-[20px] lg:border-b-0 lg:border-x-[20px] border-black bg-white flex flex-col items-center !overflow-hidden">
       <HomeNavbar />
       <main className="grid md:grid-cols-1 lg:grid-cols-6 items-center text-center px-6 xs:my-12 lg:my-6 gap-10">
         {/* First Column: 4/6 width */}
