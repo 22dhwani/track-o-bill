@@ -8,7 +8,7 @@ const MobileSideNavLinks = (props: {
   isMobileCollapse: boolean;
   onCollapse: () => void;
 }) => {
-  const mobileSideNavLinkClassName = `border-r-[0.3px] border-r-slate-200 bg-white   text-black lg:flex  flex-col font-normal   h-screen  xs:mt-[2vh] overflow-y-hidden overflow-x-hidden`;
+  const mobileSideNavLinkClassName = `border-r-[0.3px] border-r-slate-200 bg-slate-900   text-black lg:flex  flex-col font-normal   h-screen  xs:mt-[2vh] overflow-y-hidden overflow-x-hidden`;
   return (
     <div
       className={`${mobileSideNavLinkClassName} ${
@@ -19,7 +19,7 @@ const MobileSideNavLinks = (props: {
         <Heading
           text="MAIN"
           variant="smallTitle"
-          headingclassname={`tracking-wider text-sm pl-6 text-mediumGray  font-roboto-semibold`}
+          headingclassname={`tracking-wider text-sm pl-6 text-primaeryYellow  font-roboto-semibold`}
         />
         <MobileSideNavLinkItem
           isCollapse={props.isCollapse ?? false}
@@ -31,7 +31,7 @@ const MobileSideNavLinks = (props: {
               color={
                 location.pathname.startsWith("/home/dashboard")
                   ? "#F3C3F7"
-                  : "rgb(51 65 85)"
+                  : "#fff"
               }
             />
           }
@@ -43,7 +43,7 @@ const MobileSideNavLinks = (props: {
         <Heading
           text="PAGES"
           variant="smallTitle"
-          headingclassname={`tracking-wider !text-xs pl-6 text-mediumGray  font-roboto-semibold`}
+          headingclassname={`tracking-wider !text-xs pl-6 text-primaeryYellow  font-roboto-semibold`}
         />
       </div>
       <MobileSideNavLinkItem
@@ -56,7 +56,7 @@ const MobileSideNavLinks = (props: {
             color={
               location.pathname.startsWith("/home/admin-user-managment")
                 ? "#F3C3F7"
-                : "rgb(51 65 85)"
+                : "#fff"
             }
           />
         }
@@ -71,9 +71,7 @@ const MobileSideNavLinks = (props: {
         icon={
           <Question
             color={
-              location.pathname === "/home/assessment-type"
-                ? "#F3C3F7"
-                : "rgb(51 65 85)"
+              location.pathname === "/home/assessment-type" ? "#F3C3F7" : "#fff"
             }
           />
         }
@@ -88,9 +86,7 @@ const MobileSideNavLinks = (props: {
         icon={
           <Category
             color={
-              location.pathname === "/home/categories"
-                ? "#F3C3F7"
-                : "rgb(51 65 85)"
+              location.pathname === "/home/categories" ? "#F3C3F7" : "#fff"
             }
           />
         }
@@ -104,11 +100,7 @@ const MobileSideNavLinks = (props: {
         link="/home/questions"
         icon={
           <Type
-            color={
-              location.pathname === "/home/questions"
-                ? "#F3C3F7"
-                : "rgb(51 65 85)"
-            }
+            color={location.pathname === "/home/questions" ? "#F3C3F7" : "#fff"}
           />
         }
         title="Questions"
@@ -125,7 +117,7 @@ const MobileSideNavLinks = (props: {
             color={
               location.pathname === "/home/personality-traits"
                 ? "#F3C3F7"
-                : "rgb(51 65 85)"
+                : "#fff"
             }
           />
         }
@@ -143,7 +135,7 @@ const MobileSideNavLinks = (props: {
             color={
               location.pathname === "/home/answers"
                 ? "#F3C3F7"
-                : "rgb(51 65 85)"
+                : "#fff"
             }
           />
         }

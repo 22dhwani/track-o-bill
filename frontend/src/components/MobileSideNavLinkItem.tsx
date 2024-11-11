@@ -27,8 +27,8 @@ function MobileSideNavLinkItem(props: {
         props.isCollapse ||
         (!props.isCollapse && props.isHover) ||
         !props.isMobileCollapse
-          ? `${styles.sidenavlinks}  flex flex-row font-light font-family-roboto tracking-wider `
-          : `${styles.sidenavlinks}  w-full grid place-content-center font-family-roboto tracking-wide`
+          ? `${styles.sidenavlinks}  flex flex-row font-light font-family-roboto tracking-wider text-white`
+          : `${styles.sidenavlinks}  w-full grid place-content-center text-white font-family-roboto tracking-wide`
       }
       to={props.link}
     >

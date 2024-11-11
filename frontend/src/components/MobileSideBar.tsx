@@ -1,6 +1,9 @@
 import Button from "./Button";
 import Heading from "./Heading";
 import MobileSideNavlinks from "./MobileSideNavlinks";
+import Dollar from "../../images/dollar.svg";
+import Gif from "../../images/save.gif";
+
 const MobileSideBar = (props: {
   isCollapse: boolean;
   className: string;
@@ -14,22 +17,18 @@ const MobileSideBar = (props: {
     <div
       className={` ${
         !props.isCollapse
-          ? ` ${sidebarclass} bg-white  text-textColor`
+          ? ` ${sidebarclass} bg-slate-900  text-textColor`
           : `${sidebarclass} bg-clip-text text-transparent bg-gradient-to-r from-blue-700  via-[#F3C3F7] to-white`
       }   ${props.className}`}
     >
-      <div className="flex flex-row items-center  xs:h-[8.676316353887399vh]  gap-1 px-2  border-b-[0.3px] border-b-slate-200 border-r-[0.3px] border-r-slate-200">
+      <div className="flex flex-row items-center  xs:h-[8.676316353887399vh]  gap-1 px-2  border-b-[0.3px] border-none border-r-[0.3px] border-r-slate-200">
         {!props.isCollapse && (
-          <div className="flex flex-row mt-2">
+          <div className="flex items-center">
+            <img src={Dollar} alt="Dollar icon" className="w-6 h-6 mr-2" />
             <Heading
-              text="YOR"
-              variant="subHeader"
-              headingclassname={headingclassname}
-            />
-            <Heading
-              text="Jo"
-              variant="subHeader"
-              headingclassname={`md:text-2xl xs:text-2xl tracking-wide    text-primaryBlue ml-[0.125rem] font-roboto-light`}
+              text="TrackOBill"
+              variant="headingTitle"
+              headingclassname="text-2xl font-bold text-white"
             />
           </div>
         )}
@@ -53,6 +52,11 @@ const MobileSideBar = (props: {
         isMobileCollapse={props.isCollapse}
         onCollapse={props.onCollapse}
       />
+      {!props.isCollapse && (
+        <div className="sticky bottom-0">
+          <img src={Gif} alt="Save animation" />
+        </div>
+      )}
     </div>
   );
 };
