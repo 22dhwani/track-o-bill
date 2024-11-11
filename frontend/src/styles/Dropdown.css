@@ -1,0 +1,27 @@
+.Dropdown-control {
+  background-color: transparent;
+  /* border: solid 1px #F3C3F7 !important; */
+  border: none !important;
+  padding: 0.7rem 0.5rem;
+  border-radius: 0.175rem;
+  color: black;
+}
+
+.Dropdown-arrow {
+  border-color: #f3c3f7 transparent transparent;
+}
+.Dropdown-menu {
+  z-index: 100;
+  padding: 3px 0 !important;
+  border: none !important;
+  margin-top: 6px;
+  border-radius: 3px;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07))
+    drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
+}
+
+.Dropdown-option.is-selected,
+.Dropdown-option:hover {
+  background-color: rgb(241 245 249);
+  color: #f3c3f7;
+}

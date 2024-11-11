@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/SideNav";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import DesktopSideBar from "../components/DesktopSideBar";
+import SideNav from "../components/SideNav";
 
 const Dashboard: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -67,13 +69,69 @@ const Dashboard: React.FC = () => {
     },
   ];
 
+  const [isCollapse, setIsCollapse] = useState<boolean>(true);
+  const [isMobileCollapse, setIsMobileCollapse] = useState<boolean>(true);
+  const [isHover, setIsHover] = useState<boolean>(false);
+
+  // const [text, setText] = useState("<<");
+  // const [mobiletext, setMobileText] = useState("<<");
+  const collapseHandler = () => {
+    setIsCollapse((prevState) => {
+      return !prevState;
+    });
+  };
+  const mobileCollapseHandler = () => {
+    setIsMobileCollapse((prevState) => {
+      return !prevState;
+    });
+  };
+
+  const hoverHandler = () => {
+    setIsHover((prevState) => {
+      return !prevState;
+    });
+  };
+
+  //mobile side nav bar classes
+  const mobilesidebarcollapse = !isMobileCollapse
+    ? "!w-60 relative z-40  "
+    : " z-40  ";
+
+  //desktop side nav bar class
+  const sideBarHover =
+    isHover && !isCollapse
+      ? "w-60 delay-1000 transition ease-in z-40 relative "
+      : " ";
+
+  const mainOnHover =
+    isHover && !isCollapse
+      ? " transition ease-in xl:pl-[5.187500000000001vw]    absolute w-full h-full  overflow-y-scroll"
+      : "relative  w-full overflow-y-scroll";
+
+  const sidebarcollapse = !isCollapse
+    ? " z-40 transition ease-in "
+    : " z-40 w-60 tranisition ease-in";
+  const mainclasscollapse = !isCollapse
+    ? "  transition ease-in  overflow-y-scroll"
+    : " w-full overflow-y-scroll";
+  const sidebarclass = sidebarcollapse + " " + sideBarHover;
+  const mainbarclass = mainclasscollapse + " " + mainOnHover;
   return (
     <div className="flex">
       {/* Sidebar */}
-      <Sidebar />
+      <SideNav
+        mobileSideBarClassName={mobilesidebarcollapse}
+        className={sidebarclass}
+        onHover={hoverHandler}
+        isCollapse={isCollapse}
+        isMobileCollapse={isMobileCollapse}
+        isHover={isHover}
+        onCollapse={collapseHandler}
+        onMobileCollapse={mobileCollapseHandler}
+      />
 
       {/* Main Dashboard Content */}
-      <div className="flex-grow p-4 sm:p-6 bg-purple-50 min-h-screen">
+      <div className="flex-grow p-4 sm:p-6 bg-black min-h-screen">
         {/* Top bar with search and Add Group button */}
         <div className="flex items-center justify-between mb-6">
           <TextField

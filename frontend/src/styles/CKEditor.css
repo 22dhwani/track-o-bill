@@ -1,0 +1,11 @@
+.ck-editor__editable {
+  height: 20vh;
+}
+
+.ql-container {
+  min-height: 25rem;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
