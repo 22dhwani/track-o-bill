@@ -42,13 +42,13 @@ const Button: FC<ButtonProps> = ({
   if (size === "small") className += "px-3 p-1.5 text-sm ";
   if (variant === "filled")
     className +=
-      "  disabled:bg-gray-300 disabled:text-gray-500 active:shadow-inner text-textColor ";
+      " border-blue-400 disabled:bg-gray-300 disabled:text-gray-500 active:shadow-inner text-textColor ";
   if (variant === "filled" && color === "primary")
     className +=
-      "bg-[#6571ff] text-white hover:bg-primaryPurple/80 hover:text-white";
+      "bg-[#F3C3F7] text-white hover:bg-primaryBlue/80 hover:text-white";
   if (variant === "filled" && color === "secondary")
     className +=
-      "bg-blue-100 hover:bg-blue-200/90 active:bg-blue-200/90 !text-[#6571ff] ";
+      "bg-blue-100 hover:bg-blue-200/90 active:bg-blue-200/90 !text-[#F3C3F7] ";
 
   if (variant === "outlined")
     className +=
@@ -56,7 +56,7 @@ const Button: FC<ButtonProps> = ({
 
   if (variant === "ghost" && color === "primary")
     className +=
-      "bg-transparent text-textColor  hover:bg-gray-100/70 active:bg-gray-100/7- ";
+      "bg-transparent text-primaryBlue  hover:bg-gray-100/70 active:bg-gray-100/7- ";
   if (variant === "ghost" && color === "error")
     className +=
       "bg-[#ff3366] text-dimWhite  hover:bg-[#ff3366]/80  active:bg-[#ff3366]/80  ";

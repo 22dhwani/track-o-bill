@@ -14,6 +14,7 @@ export default {
       colors: {
         primaryPurple: "#F3C3F7",
         primaeryYellow: "#FBE882",
+        primaeryGreen: "#16a34a",
         mediumGray: "#7987a1",
         dimGray: "#1A1B1C",
 
