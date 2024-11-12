@@ -46,9 +46,9 @@ const DesktopSideBar = (props: {
           }
         >
           <div className="space-y-1">
-            <div className="w-5 h-[0.18rem] bg-mediumGray rounded-md"></div>
-            <div className="w-5 h-0.5 bg-mediumGray rounded-md"></div>
-            <div className="w-5 h-[0.19rem] bg-mediumGray rounded-md"></div>
+            <div className="w-5 h-[0.18rem] bg-white rounded-md"></div>
+            <div className="w-5 h-0.5 bg-white rounded-md"></div>
+            <div className="w-5 h-[0.19rem] bg-white rounded-md"></div>
           </div>
         </Button>
       </div>
