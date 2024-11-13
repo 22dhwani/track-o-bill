@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 
 import { NavLink } from "react-router-dom";
 import { useSignUpMutation } from "../features/api/signupSlice";
+import Cookies from "js-cookie";
 // Define the UserInfo interface
 interface UserInfo {
   firstName: string | null; // Allow null since FormData.get can return null
@@ -11,7 +12,10 @@ interface UserInfo {
   password: string | null;   // Allow null since FormData.get can return null
   terms: boolean | null;     // Assuming terms is a checkbox, it can be true or false
 }
-
+interface SignUpResponse {
+  token: string; // Add token property
+  // ... other properties if needed
+}
   // Function to check if the password and confirm password are correct
   const validatePassword = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
@@ -66,13 +70,13 @@ const Signup: React.FC = () => {
 
     try {
       // Dispatch user data to the slice and catch the response
-      const response = await signUp(userInfo).unwrap();
+      const response = await signUp(userInfo) as unknown as { data: SignUpResponse };
       console.log('Sign up successful:', response);
 
-      
+      Cookies.set('userToken', response?.data?.token, { secure: true, sameSite: "Strict", expires: 7 });
       // Optionally, you can redirect or show a success message here
-    } catch (error) {
-      console.error('Sign up failed:', error);
+    } catch (error : any) {
+      console.error('Sign up failed:', error.message);
       alert('Sign up failed. Please try again.'); // Show an error message to the user
     }
     // Clear the form fields

@@ -1,19 +1,21 @@
-import React, { useState } from "react";
-import Sidebar from "../components/SideNav";
+import React, { useEffect, useState } from "react";
+// import Sidebar from "../components/SideNav";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import DesktopSideBar from "../components/DesktopSideBar";
+// import DesktopSideBar from "../components/DesktopSideBar";
 import SideNav from "../components/SideNav";
+import Cookies from "js-cookie";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [budget, setBudget] = useState("");
-  const [type, setType] = useState("");
+  // const [type, setType] = useState("");
   const [items, setItems] = useState([{ id: 1, itemName: "", cost: "" }]);
 
   // Function to add a new item
@@ -116,6 +118,13 @@ const Dashboard: React.FC = () => {
     : " w-full overflow-y-scroll";
   const sidebarclass = sidebarcollapse + " " + sideBarHover;
   const mainbarclass = mainclasscollapse + " " + mainOnHover;
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
   return (
     <div className="flex">
       {/* Sidebar */}
