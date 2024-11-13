@@ -1,4 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+//import Sidebar from "../components/SideNav";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import DesktopSideBar from "../components/DesktopSideBar";
+import SideNav from "../components/SideNav";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -19,13 +28,23 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-import SideNav from "../components/SideNav";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import Topbar from "../components/TopBar";
 import Heading from "../components/Heading";
 import Card from "../components/Card";
 import SearchBar from "../components/SearchBar";
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = Cookies.get('userToken');
+    if (!token) {
+      navigate('/home');
+    }
+  }, []);
+
+
   const [isCollapse, setIsCollapse] = useState<boolean>(true);
   const [isMobileCollapse, setIsMobileCollapse] = useState<boolean>(true);
   const [isHover, setIsHover] = useState<boolean>(false);
