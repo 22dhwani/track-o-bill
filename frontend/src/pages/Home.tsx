@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 const Home: React.FC = () => {
   return (
-    <div className="lg:max-h-screen border-4 lg:border-t-[20px] lg:border-b-0 lg:border-x-[20px] border-black bg-slate-900  flex flex-col items-center !overflow-hidden">
+    <div className="lg:max-h-screen border-4 lg:border-t-[20px] lg:border-b-0 lg:border-x-[20px] border-black bg-[#1A1B1C]  flex flex-col items-center !overflow-hidden">
       <HomeNavbar />
       <main className="grid md:grid-cols-1 lg:grid-cols-6 items-center text-center px-6 xs:my-12 lg:my-6 gap-10 ">
         {/* First Column: 4/6 width */}

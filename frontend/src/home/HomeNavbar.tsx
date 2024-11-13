@@ -11,7 +11,7 @@ function HomeNavbar() {
     window.location.href = "/login"; // Replace with your target URL
   };
   return (
-    <header className="w-full flex justify-between items-center py-4 px-6 bg-slate-900  shadow-2xl">
+    <header className="w-full flex justify-between items-center py-4 px-6 bg-[#1A1B1C]  shadow-2xl">
       <h1 className="text-3xl font-bold text-white libre-bold">
         <a href="/home" rel="noopener noreferrer" className="cursor-pointer">
           TrackOBill

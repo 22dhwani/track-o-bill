@@ -1,10 +1,18 @@
-import { Dashboard, User, Question, Type, Category, Traits } from "./Icons";
+import {
+  Dashboard,
+  User,
+  Question,
+  Type,
+  Category,
+  Traits,
+  Answer,
+} from "./Icons";
 import DesktopSideNavLinkItem from "./DesktopSideNavLinkItem";
 import { useLocation } from "react-router-dom";
 import Heading from "./Heading";
 
 const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
-  const sideNavLinkClass = `bg-slate-900 -mt-10 xl:py-[3vh] lg:py-[2.8vh] text-black lg:flex    w-full  text-md flex-col font-normal lg:mt-0  h-screen xs:hidden  overflow-y-scroll !relative !overflow-x-hidden `;
+  const sideNavLinkClass = `bg-[#1A1B1C] -mt-10 xl:py-[3vh] lg:py-[2.8vh] text-black lg:flex    w-full  text-md flex-col font-normal lg:mt-0  h-screen xs:hidden  overflow-y-scroll !relative !overflow-x-hidden `;
   const location = useLocation();
   return (
     <div className={`${sideNavLinkClass}`}>
@@ -48,14 +56,25 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
           icon={
             <User
               color={
-                location.pathname.startsWith("/home/admin-user-managment")
+                location.pathname.startsWith("/home/groups")
                   ? "#F3C3F7"
                   : "#fff"
               }
             />
           }
-          link="/home/admin-user-managment"
-          title="Admin Users"
+          link="/home/groups"
+          title="Groups"
+        />
+        <DesktopSideNavLinkItem
+          isCollapse={props.isCollapse}
+          isHover={props.isHover}
+          icon={
+            <Answer
+              color={location.pathname === "/home/bills" ? "#F3C3F7" : "#fff"}
+            />
+          }
+          link="/home/bills"
+          title="Bills"
         />
         <DesktopSideNavLinkItem
           isCollapse={props.isCollapse}
@@ -63,14 +82,12 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
           icon={
             <Question
               color={
-                location.pathname === "/home/assessment-type"
-                  ? "#F3C3F7"
-                  : "#fff"
+                location.pathname === "/home/activity" ? "#F3C3F7" : "#fff"
               }
             />
           }
-          link="/home/assessment-type"
-          title="Assessment Types"
+          link="/home/activity"
+          title="Activity"
         />
         <DesktopSideNavLinkItem
           isCollapse={props.isCollapse}
@@ -78,57 +95,39 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
           icon={
             <Category
               color={
-                location.pathname === "/home/categories" ? "#F3C3F7" : "#fff"
+                location.pathname === "/home/my-profile" ? "#F3C3F7" : "#fff"
               }
             />
           }
-          link="/home/categories"
-          title="Categories"
+          link="/home/my-profile"
+          title="My Profile"
+        />
+        <DesktopSideNavLinkItem
+          isCollapse={props.isCollapse}
+          isHover={props.isHover}
+          icon={
+            <Question
+              color={
+                location.pathname === "/home/reset-password"
+                  ? "#F3C3F7"
+                  : "#fff"
+              }
+            />
+          }
+          link="/home/reset-password"
+          title="Reset Password"
         />
         <DesktopSideNavLinkItem
           isCollapse={props.isCollapse}
           isHover={props.isHover}
           icon={
             <Type
-              color={
-                location.pathname === "/home/questions" ? "#F3C3F7" : "#fff"
-              }
+              color={location.pathname === "/home/logout" ? "#F3C3F7" : "#fff"}
             />
           }
-          link="/home/questions"
-          title="Questions"
+          link="/home/logout"
+          title="Logout"
         />
-        <DesktopSideNavLinkItem
-          isCollapse={props.isCollapse}
-          isHover={props.isHover}
-          icon={
-            <Traits
-              color={
-                location.pathname === "/home/personality-traits"
-                  ? "#F3C3F7"
-                  : "#fff"
-              }
-            />
-          }
-          link="/home/personality-traits"
-          title="Personality Traits"
-        />
-
-        {/* <DesktopSideNavLinkItem
-          isCollapse={props.isCollapse}
-          isHover={props.isHover}
-          icon={
-            <Answer
-              color={
-                location.pathname === "/home/answers"
-                  ? "#F3C3F7"
-                  : "#fff"
-              }
-            />
-          }
-          link="/home/answers"
-          title="Answers"
-        /> */}
       </div>
     </div>
   );
