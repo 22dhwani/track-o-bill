@@ -1,22 +1,80 @@
 import React, { useRef } from "react";
 
 import { NavLink } from "react-router-dom";
+import { useSignUpMutation } from "../features/api/signupSlice";
+// Define the UserInfo interface
+interface UserInfo {
+  firstName: string | null; // Allow null since FormData.get can return null
+  lastName: string | null;  // Allow null since FormData.get can return null
+  username: string | null;   // Allow null since FormData.get can return null
+  email: string | null;      // Allow null since FormData.get can return null
+  password: string | null;   // Allow null since FormData.get can return null
+  terms: boolean | null;     // Assuming terms is a checkbox, it can be true or false
+}
+
+  // Function to check if the password and confirm password are correct
+  const validatePassword = (event: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+    const password = formData.get("password") as string; // Cast to string
+    const confirmPassword = formData.get("confirmPassword") as string; // Cast to string
+
+    // Check for empty fields
+    if (!password || !confirmPassword) {
+        alert("Please fill in both password fields.");
+        event.preventDefault();
+        return false;
+    }
+
+    // Check password strength
+    const passwordStrengthRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/; // At least 8 characters, 1 number, 1 special character
+    if (!passwordStrengthRegex.test(password)) {
+        alert("Password must be at least 8 characters long and include a number and a special character.");
+        event.preventDefault();
+        return false;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        alert("Password and confirm password do not match");
+        event.preventDefault();
+        return false;
+    }
+    return true;
+};
 
 const Signup: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  // Dispatch user data to the slice
+  const [signUp] = useSignUpMutation(); // Get the mutation function
+
   // Function to handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevent default form submission
     const formData = new FormData(event.currentTarget); // Get form data
-    const userInfo = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-      terms: formData.get("terms"),
+    const isValid = validatePassword(event);
+    if (!isValid) {
+        return;
+    }
+    const userInfo: UserInfo = {
+      firstName: formData.get("firstName") as string | null,
+      lastName: formData.get("lastName") as string | null,  
+      username: formData.get("username") as string | null,  
+      email: formData.get("email") as string | null,        
+      password: formData.get("password") as string | null,  
+      terms: formData.get("terms") === 'on',
     };
-    console.log(userInfo); // Log user info or handle it as needed
 
+    try {
+      // Dispatch user data to the slice and catch the response
+      const response = await signUp(userInfo).unwrap();
+      console.log('Sign up successful:', response);
+
+      
+      // Optionally, you can redirect or show a success message here
+    } catch (error) {
+      console.error('Sign up failed:', error);
+      alert('Sign up failed. Please try again.'); // Show an error message to the user
+    }
     // Clear the form fields
     if (formRef.current) {
       formRef.current.reset(); // Reset the form fields
@@ -70,6 +128,12 @@ const Signup: React.FC = () => {
                 />
               </div>
               <input
+                type="text"
+                name="username" // Added name attribute
+                placeholder="Username"
+                className="w-full p-3 rounded bg-gray-800 text-white"
+              />
+              <input
                 type="email"
                 name="email" // Added name attribute
                 placeholder="Email"
@@ -79,6 +143,12 @@ const Signup: React.FC = () => {
                 type="password"
                 name="password" // Added name attribute
                 placeholder="Enter your password"
+                className="w-full p-3 rounded bg-gray-800 text-white"
+              />
+              <input
+                type="password"
+                name="confirmPassword" // Added name attribute
+                placeholder="Confirm your password"
                 className="w-full p-3 rounded bg-gray-800 text-white"
               />
               <div className="flex items-center mt-2">
