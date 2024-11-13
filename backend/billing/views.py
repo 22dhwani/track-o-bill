@@ -1,19 +1,32 @@
 from .forms import *
 from .models import *
-from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
 from django.http import JsonResponse
 from django.views.generic import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth import login, logout
+from drf_yasg.utils import swagger_auto_schema
+from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import get_user_model, login, logout
-from .validations import custom_validation, validate_email, validate_password
-from rest_framework.authentication import SessionAuthentication,TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from .serializers import UserRegisterSerializer, UserLoginSerializer
+from .validations import custom_validation, validate_email, validate_password
 
 # Registration View
 class UserRegister(APIView):
+    """
+    This will register an user, make an account and generate a JWT Auth Token.
+    
+    # Parameters
+    - `email (string): User Email.`
+    - `password (string): User Password.`
+    - `username (string): A Username for the account.`
+    
+    # Headers 
+    - `None`
+    """
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
@@ -29,6 +42,17 @@ class UserRegister(APIView):
 
 # Login View
 class UserLogin(APIView):
+    """
+    This will log an user in and generate a JWT Auth Token.
+    
+    # Parameters
+    - `email (string): User Email.`
+    - `password (string): User Password.`
+        
+    # Headers 
+    - `None`
+    """
+    
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
@@ -48,6 +72,17 @@ class UserLogin(APIView):
 
 # Logout View
 class UserLogout(APIView):
+    """
+    This will log an user out and generate expire the JWT Auth Token.
+    
+    # Parameters
+    - `None`
+        
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """
+    
+
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
 
@@ -62,7 +97,18 @@ class UserLogout(APIView):
         return Response(status=status.HTTP_200_OK)
 
 # To get all the groups user has joined in
-class UserView(APIView):
+class UserView(APIView):        
+    """
+    This will get all the groups an user is in.
+    
+    # Parameters
+    - `None`
+        
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """
+    
+    
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
@@ -79,6 +125,17 @@ class UserView(APIView):
 
 # get all group members
 class GroupMembersView(APIView):
+    """
+    This will get all the members which are in a group.
+    
+    # Parameters
+    - `group_id of a group user has joined, in url part`
+    - `Note that the user is required to be a part of the group he wants to get all the members for`
+        
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """
+    
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
@@ -99,6 +156,17 @@ class GroupMembersView(APIView):
 
 # create group
 class CreateGroupView(APIView): 
+    
+    """
+    This will create a group.
+    
+    # Parameters
+    - `group_name (string): A name for the group.`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """
+    
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -120,6 +188,16 @@ class CreateGroupView(APIView):
 
 # rename group
 class RenameGroupView(APIView): 
+    """
+    This will rename the name of a group.
+    
+    # Parameters
+    - `group_name (string): A new name for the group.`
+    - `group_id (integer): group id of an already created group.`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -135,7 +213,16 @@ class RenameGroupView(APIView):
             return JsonResponse({"detail":"please provide group_name & integer group_id variable"}, status = 404)
 
 # join group
-class JoinGroupView(APIView): 
+class JoinGroupView(APIView):
+    """
+    This will add a user into the group.
+    
+    # Parameters
+    - `group_id (integer): group id of an already created group.`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """ 
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -191,6 +278,15 @@ def is_settled_up(user,group,everyone=False):
 
 # leave group
 class LeaveGroupView(APIView): 
+    """
+    This will remove a user from the group if he/she/they/them are settled up from the other members.
+    
+    # Parameters
+    - `group_id (integer): group id of an already created group.`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """ 
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -219,7 +315,17 @@ class LeaveGroupView(APIView):
             return JsonResponse({"detail":"please provide a integer group_id variable"}, status = 404)
 
 # delete group
-class DeleteGroupView(APIView): 
+class DeleteGroupView(APIView):
+    """
+    This will delete the group if all members are settled up.
+    
+    # Parameters
+    - `group_id (integer): group id of an already created group.`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """ 
+    
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -246,7 +352,23 @@ def are_users_in_group(users_involved,group):
     return True
 
 # add transactions
-class AddTransactionView(APIView): 
+class AddTransactionView(APIView):
+    """
+    This will add a transaction in a group.
+    
+    # Parameters
+    - `bill_id (integer): bill id of an already created bill (pass 1 for now).`
+    - `group_id (integer): group id of a group in which you want to add the transaction.`
+    - `payer_id (integer): user id of a user who payed for the transaction.`
+    - `transaction_adder (integer): user id of a user who is adding the transaction. (so user id of authenticated user)`
+    - `users_involved ([integer]): user ids of a users who are involved in the transaction.`
+    - `amount_users_own ([integer]): amount users own to the payer accroding to users_involved.`
+    - `total_amount (integer): Total amount user owns.`
+    - `name (string): Name of Transaction.`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """  
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -312,7 +434,17 @@ class AddTransactionView(APIView):
             return JsonResponse({"detail":"Please Provide bill_id, group_id, payer_id, transaction_adder as integers, users_involved, amount_users_own as lists and total_amount as a decimal field"}, status = 404)
 
 # remove transactions
-class RemoveTransactionView(APIView): 
+class RemoveTransactionView(APIView):
+    """
+    This will remove a transaction from the group.
+    
+    # Parameters
+    - `transaction_id (integer): transaction id of an already created transaction.`
+
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """  
+    
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -329,6 +461,15 @@ class RemoveTransactionView(APIView):
 
 # list alll transactions
 class ListAllTransactionsView(APIView): 
+    """
+    This will list all the transactions of a group.
+    
+    # Parameters
+    - `group_id (integer): group id of a group in which you want to add the transaction.`
+        
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """  
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -378,6 +519,20 @@ class ListAllTransactionsView(APIView):
 
 # edit transaction
 class EditTransactionsView(APIView):
+    """
+    This will edit a transaction in the group.
+    
+    # Parameters
+    - `transaction_id (integer): transaction id of an already created transaction.`
+    - `payer_id (integer): user id of a user who payed for the transaction.`
+    - `users_involved ([integer]): user ids of a users who are involved in the transaction.`
+    - `amount_users_own ([integer]): amount users own to the payer accroding to users_involved.`
+    - `total_amount (integer): Total amount user owns.`
+    - `name (string): Name of Transaction.`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """  
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
@@ -485,12 +640,21 @@ def calculate_bill(this_user,other_users,group):
 
 # settle up view
 class SettleUpView(APIView):
+    
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
     # get all users and bills we have to own/borrow from them
     def get(self,request,format=None):
+        """
+        This will view what the authenticated user owns/gains from other people.
         
+        # Parameters
+        - `group_id (integer): group id of a group in which you want to add the transaction.`
+        
+        # Headers 
+        - `{"Authorization":"token {auth_token}"}`
+        """  
         form = GroupForm(request.data)
         if form.is_valid():
             group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
@@ -517,7 +681,16 @@ class SettleUpView(APIView):
         
     # get all users and bills we have to own/borrow from them
     def post(self,request,format=None):
+        """
+        This will view what the authenticated user owns/gains from other people.
         
+        # Parameters
+        - `group_id (integer): group id of a group in which you want to add the transaction.`
+        - `user_id (integer): user id of a user with whom the authenticated user wants to settle up.`
+        
+        # Headers 
+        - `{"Authorization":"token {auth_token}"}`
+        """ 
         form = SettleUpForm(request.data)
         
         if form.is_valid():
