@@ -1,5 +1,13 @@
 import MobileSideNavLinkItem from "./MobileSideNavLinkItem";
-import { Dashboard, User, Question, Type, Category, Traits } from "./Icons";
+import {
+  Dashboard,
+  User,
+  Question,
+  Type,
+  Category,
+  Traits,
+  Answer,
+} from "./Icons";
 import Heading from "./Heading";
 
 const MobileSideNavLinks = (props: {
@@ -8,7 +16,7 @@ const MobileSideNavLinks = (props: {
   isMobileCollapse: boolean;
   onCollapse: () => void;
 }) => {
-  const mobileSideNavLinkClassName = `border-r-[0.3px] border-r-slate-200 bg-slate-900   text-black lg:flex  flex-col font-normal   h-screen  xs:mt-[2vh] overflow-y-hidden overflow-x-hidden`;
+  const mobileSideNavLinkClassName = `border-r-[0.3px] border-r-slate-200 bg-[#1A1B1C]   text-black lg:flex  flex-col font-normal   h-screen  xs:mt-[2vh] overflow-y-hidden overflow-x-hidden`;
   return (
     <div
       className={`${mobileSideNavLinkClassName} ${
@@ -50,98 +58,86 @@ const MobileSideNavLinks = (props: {
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
         isHover={props.isHover ?? false}
-        link="/home/admin-user-managment"
+        link="/home/groups"
         icon={
           <User
             color={
-              location.pathname.startsWith("/home/admin-user-managment")
-                ? "#F3C3F7"
-                : "#fff"
+              location.pathname.startsWith("/home/groups") ? "#F3C3F7" : "#fff"
             }
           />
         }
-        title="Admin Users"
+        title="Groups"
         onClick={props.onCollapse}
       />
       <MobileSideNavLinkItem
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
         isHover={props.isHover ?? false}
-        link="/home/assessment-type"
+        link="/home/bills"
+        icon={
+          <Answer
+            color={location.pathname === "/home/bills" ? "#F3C3F7" : "#fff"}
+          />
+        }
+        title="Bills"
+        onClick={props.onCollapse}
+      />
+      <MobileSideNavLinkItem
+        isMobileCollapse={props.isMobileCollapse}
+        isCollapse={props.isCollapse ?? false}
+        isHover={props.isHover ?? false}
+        link="/home/activity"
         icon={
           <Question
-            color={
-              location.pathname === "/home/assessment-type" ? "#F3C3F7" : "#fff"
-            }
+            color={location.pathname === "/home/activity" ? "#F3C3F7" : "#fff"}
           />
         }
-        title="Assessment Types"
+        title="Activity"
         onClick={props.onCollapse}
       />
       <MobileSideNavLinkItem
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
         isHover={props.isHover ?? false}
-        link="/home/categories"
+        link="/home/my-profile"
         icon={
           <Category
             color={
-              location.pathname === "/home/categories" ? "#F3C3F7" : "#fff"
+              location.pathname === "/home/my-profile" ? "#F3C3F7" : "#fff"
             }
           />
         }
-        title="Categories"
+        title="My Profile"
         onClick={props.onCollapse}
       />
       <MobileSideNavLinkItem
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
         isHover={props.isHover ?? false}
-        link="/home/questions"
+        link="/home/reset-password"
+        icon={
+          <Question
+            color={
+              location.pathname === "/home/reset-password" ? "#F3C3F7" : "#fff"
+            }
+          />
+        }
+        title="Reset Password"
+        onClick={props.onCollapse}
+      />
+      <MobileSideNavLinkItem
+        isMobileCollapse={props.isMobileCollapse}
+        isCollapse={props.isCollapse ?? false}
+        isHover={props.isHover ?? false}
+        link="/home/logout"
         icon={
           <Type
-            color={location.pathname === "/home/questions" ? "#F3C3F7" : "#fff"}
+            color={location.pathname === "/home/logout" ? "#F3C3F7" : "#fff"}
           />
         }
-        title="Questions"
+        title="Logout"
         onClick={props.onCollapse}
       />
-
-      <MobileSideNavLinkItem
-        isMobileCollapse={props.isMobileCollapse}
-        isCollapse={props.isCollapse ?? false}
-        isHover={props.isHover ?? false}
-        link="/home/personality-traits"
-        icon={
-          <Traits
-            color={
-              location.pathname === "/home/personality-traits"
-                ? "#F3C3F7"
-                : "#fff"
-            }
-          />
-        }
-        title="Personality Traits"
-        onClick={props.onCollapse}
-      />
-
-      {/* <MobileSideNavLinkItem
-        isMobileCollapse={props.isMobileCollapse}
-        isCollapse={props.isCollapse ?? false}
-        isHover={props.isHover ?? false}
-        link="/home/answers"
-        icon={
-          <Answer
-            color={
-              location.pathname === "/home/answers"
-                ? "#F3C3F7"
-                : "#fff"
-            }
-          />
-        }
-        title="Answers"
-        onClick={props.onCollapse}
-      /> */}
     </div>
   );
 };

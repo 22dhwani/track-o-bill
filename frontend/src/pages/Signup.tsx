@@ -24,7 +24,7 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="max-h-screen border-4 lg:border-[20px] border-black bg-slate-900 flex flex-col items-center !overflow-hidden">
+    <div className="max-h-screen border-4 lg:border-[20px] border-black bg-[#1A1B1C] flex flex-col items-center !overflow-hidden">
       <div className="flex lg:flex-row flex-col h-screen  gap-10  max-h-screen border rounded-2xl border-none w-full">
         <div
           className="lg:w-1/2 h-full bg-cover bg-center  overflow-hidden"
