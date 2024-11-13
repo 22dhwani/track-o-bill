@@ -1,21 +1,44 @@
-import { useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useRef } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../features/api/signupSlice";
+import Cookies from "js-cookie";
 
+// Define the UserInfo interface
+interface UserCredentials{
+  email: string | null;      // Allow null since FormData.get can return null
+  password: string | null;   // Allow null since FormData.get can return null
+}
+interface LoginResponse {
+  token: string; // Add token property
+  email: string | null;      // Allow null since FormData.get can return null
+  password: string | null;   // Allow null since FormData.get can return null
+}
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const [login] = useLoginMutation();
   const formRef = useRef<HTMLFormElement>(null);
   // Function to handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevent default form submission
     const formData = new FormData(event.currentTarget); // Get form data
-    const userInfo = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-      terms: formData.get("terms"),
+    const userInfo : UserCredentials = {
+      email: formData.get("email") as string | null, // Type assertion
+      password: formData.get("password") as string | null, // Type assertion
     };
     console.log(userInfo); // Log user info or handle it as needed
 
+    try {
+      // Dispatch user data to the slice and catch the response
+      const response = await login(userInfo) as unknown as { data: LoginResponse };
+      console.log('Sign up successful:', response);
+
+      Cookies.set('userToken', response?.data?.token, { secure: true, sameSite: "Strict", expires: 7 });
+      navigate('/dashboard');
+      // Optionally, you can redirect or show a success message here
+    } catch (error : any) {
+      console.error('Sign up failed:', error.message);
+      alert('Sign up failed. Please try again.'); // Show an error message to the user
+    }
     // Clear the form fields
     if (formRef.current) {
       formRef.current.reset(); // Reset the form fields
@@ -67,21 +90,20 @@ const Login: React.FC = () => {
                 placeholder="Enter your password"
                 className="w-full p-3 rounded bg-gray-800 text-white"
               />
-              <div className="flex items-center mt-2">
+              {/* <div className="flex items-center mt-2">
                 <input
                   type="checkbox"
                   id="terms"
                   name="terms"
                   className="mr-2"
                 />{" "}
-                {/* Added name attribute */}
                 <label htmlFor="terms" className="text-gray-400">
                   I agree to the{" "}
                   <a href="#" className="text-primaryPurple">
                     Terms & Conditions
                   </a>
                 </label>
-              </div>
+              </div> */}
               <button
                 type="submit"
                 className="bg-green-600 text-white w-full py-2 rounded-md mt-4 font-semibold"
@@ -91,16 +113,18 @@ const Login: React.FC = () => {
             </form>
 
             <div className="mt-6 text-center text-gray-400">
-              <p>Or register with</p>
+              <p>Or If you don't have an account register here</p>
               <div className="flex gap-4 justify-center mt-4">
-                <button className="flex items-center gap-2 bg-primaryPurple p-2 rounded text-white">
-                  <i className="fab fa-google text-2xl"></i>
-                  Google
-                </button>
-                <button className="flex items-center gap-2 bg-primaryPurple p-2 rounded text-white">
+              <NavLink to="/signup">    
+                  <button className="flex items-center gap-2 bg-primaryPurple p-2 rounded text-white">
+                    {/* <i className="fab fa-google text-2xl"></i> */}
+                  Sign Up
+                  </button>
+              </NavLink>
+                {/* <button className="flex items-center gap-2 bg-primaryPurple p-2 rounded text-white">
                   <i className="fab fa-apple text-2xl"></i>
                   Apple
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

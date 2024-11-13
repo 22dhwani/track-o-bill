@@ -9,9 +9,16 @@ import RemoveIcon from "@mui/icons-material/Remove";
 // import DesktopSideBar from "../components/DesktopSideBar";
 import SideNav from "../components/SideNav";
 import Cookies from "js-cookie";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = Cookies.get('userToken');
+    if (!token) {
+      navigate('/home');
+    }
+  }, []);
   const [open, setOpen] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [budget, setBudget] = useState("");
@@ -118,13 +125,7 @@ const Dashboard: React.FC = () => {
     : " w-full overflow-y-scroll";
   const sidebarclass = sidebarcollapse + " " + sideBarHover;
   const mainbarclass = mainclasscollapse + " " + mainOnHover;
-  const navigate = useNavigate();
-  useEffect(() => {
-    const token = Cookies.get('token');
-    if (!token) {
-      navigate('/login');
-    }
-  }, []);
+
   return (
     <div className="flex">
       {/* Sidebar */}

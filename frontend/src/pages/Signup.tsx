@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSignUpMutation } from "../features/api/signupSlice";
 import Cookies from "js-cookie";
 // Define the UserInfo interface
@@ -47,6 +47,7 @@ interface SignUpResponse {
 };
 
 const Signup: React.FC = () => {
+  const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   // Dispatch user data to the slice
   const [signUp] = useSignUpMutation(); // Get the mutation function
@@ -74,6 +75,7 @@ const Signup: React.FC = () => {
       console.log('Sign up successful:', response);
 
       Cookies.set('userToken', response?.data?.token, { secure: true, sameSite: "Strict", expires: 7 });
+      navigate('/dashboard');
       // Optionally, you can redirect or show a success message here
     } catch (error : any) {
       console.error('Sign up failed:', error.message);

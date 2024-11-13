@@ -8,6 +8,10 @@ interface UserInfo {
     password: string | null;   // Allow null since FormData.get can return null
     terms: boolean | null;     // Assuming terms is a checkbox, it can be true or false
   }
+interface userLogin {
+    email: string | null;      // Allow null since FormData.get can return null
+    password: string | null;   // Allow null since FormData.get can return null
+}
 const signupSlice = createApi({
     reducerPath: 'signupApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
@@ -28,8 +32,23 @@ const signupSlice = createApi({
                 }
             },
         }),
+        login: builder.mutation<userLogin, userLogin>({
+            query: (userInfo) => ({
+                url: '/login',
+                method: 'POST',
+                body: userInfo,
+            }),
+            // Added error handling
+            async onQueryStarted(_, { queryFulfilled }) { // Corrected unused parameter
+                try {
+                    await queryFulfilled;
+                } catch (error) {
+                    console.error('Error during login:', error);
+                }
+            },
+        }),
     }),
 });
 
-export const { useSignUpMutation } = signupSlice;
+export const { useSignUpMutation, useLoginMutation } = signupSlice;
 export default signupSlice;
