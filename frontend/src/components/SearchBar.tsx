@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import Search from "../../assets/Search.svg";
+import Search from "../../images/Search.svg";
 import { useLocation } from "react-router-dom";
-import useDebounce from "../../hooks/useDebounce";
 
 const SearchBar = (props: { onChange: (key: string) => void }) => {
   const [searchKey, setSearchKey] = useState("");
-  const debouncedSearch = useDebounce(searchKey, 700);
 
   const searchHandler = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -14,10 +12,6 @@ const SearchBar = (props: { onChange: (key: string) => void }) => {
     props.onChange(searchKey);
   };
   const location = useLocation();
-
-  useEffect(() => {
-    if (debouncedSearch.length > 0) props.onChange(debouncedSearch);
-  }, [debouncedSearch]);
 
   //empties the bar on other page load
   useEffect(() => {

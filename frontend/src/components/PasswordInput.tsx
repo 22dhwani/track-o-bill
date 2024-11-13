@@ -1,6 +1,6 @@
 import { useState } from "react";
-import EyeOff from "../../assets/eye-off.svg";
-import Eye from "../../assets/eye.svg";
+import EyeOff from "../../images/eye-off.svg";
+import Eye from "../../images/eye.svg";
 
 const PasswordInput = ({ ...props }) => {
   const [passwordType, setPasswordType] = useState("password");

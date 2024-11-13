@@ -8,6 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DesktopSideBar from "../components/DesktopSideBar";
 import SideNav from "../components/SideNav";
+import Topbar from "../components/TopBar";
 
 const Dashboard: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -131,7 +132,8 @@ const Dashboard: React.FC = () => {
       />
 
       {/* Main Dashboard Content */}
-      <div className="flex-grow p-4 sm:p-6 bg-black min-h-screen">
+      <div className="flex-grow  bg-black min-h-screen">
+        <Topbar isCollapse={false} />
         {/* Top bar with search and Add Group button */}
         <div className="flex items-center justify-between mb-6">
           <TextField
