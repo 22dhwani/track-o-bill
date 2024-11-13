@@ -1,0 +1,45 @@
+.tableFooter {
+  border-radius: 3px;
+  background-color: transparent;
+  padding: 8px 8px;
+  margin: 3vh 0 3vh auto;
+  width: max-content;
+  font-weight: 400;
+  text-align: left;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-right: 4px;
+  margin-left: 4px;
+  font-family: "Roboto", sans-serif;
+}
+
+.activeButton {
+  color: white;
+  background: #f3c3f7;
+}
+
+.inactiveButton {
+  color: black;
+  background: rgb(241 245 249);
+}
+
+.activeArrowButton {
+  color: black;
+  background: none;
+  font-weight: bold !important;
+}
+
+.inactiveArrowButton {
+  color: black;
+  background: none;
+  font-weight: bold !important;
+}

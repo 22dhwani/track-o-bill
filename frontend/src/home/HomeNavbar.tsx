@@ -2,7 +2,7 @@ import Button from "../components/Button";
 import Link from "../components/Link";
 
 function HomeNavbar() {
-  const className = "text-black font-medium font-roboto-bold";
+  const className = "text-white font-medium font-roboto-bold";
   const handleClick = () => {
     window.location.href = "/signup"; // Replace with your target URL
   };
@@ -11,8 +11,8 @@ function HomeNavbar() {
     window.location.href = "/login"; // Replace with your target URL
   };
   return (
-    <header className="w-full flex justify-between items-center py-4 px-6 bg-white shadow-md">
-      <h1 className="text-3xl font-bold text-black libre-bold">
+    <header className="w-full flex justify-between items-center py-4 px-6 bg-slate-900  shadow-2xl">
+      <h1 className="text-3xl font-bold text-white libre-bold">
         <a href="/home" rel="noopener noreferrer" className="cursor-pointer">
           TrackOBill
         </a>
@@ -26,13 +26,13 @@ function HomeNavbar() {
         <Button
           children="Log In"
           onClick={handleloginClick}
-          buttonClassName=" bg-black text-white px-4 py-2 rounded-lg libre"
+          buttonClassName=" bg-primaryPurple !text-black px-4 py-2 rounded-lg libre"
         />
 
         <Button
           onClick={handleClick}
           children="Sign Up"
-          buttonClassName=" bg-black text-white px-4 py-2 rounded-lg libre"
+          buttonClassName=" bg-primaryPurple !text-black px-4 py-2 rounded-lg libre"
         />
       </div>
     </header>
