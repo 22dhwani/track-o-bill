@@ -26,13 +26,13 @@ function HomeNavbar() {
         <Button
           children="Log In"
           onClick={handleloginClick}
-          buttonClassName=" bg-primaryPurple !text-black px-4 py-2 rounded-lg libre"
+          buttonClassName=" bg-primaryPurple !text-white px-4 py-2 rounded-lg libre"
         />
 
         <Button
           onClick={handleClick}
           children="Sign Up"
-          buttonClassName=" bg-primaryPurple !text-black px-4 py-2 rounded-lg libre"
+          buttonClassName=" bg-primaryPurple !text-white px-4 py-2 rounded-lg libre"
         />
       </div>
     </header>

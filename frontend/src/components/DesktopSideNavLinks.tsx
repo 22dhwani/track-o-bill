@@ -1,21 +1,27 @@
-import {
-  Dashboard,
-  User,
-  Question,
-  Type,
-  Category,
-  Traits,
-  Answer,
-} from "./Icons";
+import { Dashboard, User, Question, Type, Category, Answer } from "./Icons";
 import DesktopSideNavLinkItem from "./DesktopSideNavLinkItem";
 import { useLocation } from "react-router-dom";
 import Heading from "./Heading";
+import { useState } from "react";
+import Modal from "./Modal";
+import LogoutModal from "./LogoutModal";
+import styles from "../styles/SideNavLinks.module.css";
 
 const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
   const sideNavLinkClass = `bg-[#1A1B1C] -mt-10 xl:py-[3vh] lg:py-[2.8vh] text-black lg:flex    w-full  text-md flex-col font-normal lg:mt-0  h-screen xs:hidden  overflow-y-scroll !relative !overflow-x-hidden `;
+  const [openLogout, setopenLogout] = useState(false);
   const location = useLocation();
   return (
     <div className={`${sideNavLinkClass}`}>
+      {openLogout && (
+        <Modal className="!py-2">
+          <LogoutModal
+            onClose={() => {
+              setopenLogout(false);
+            }}
+          />
+        </Modal>
+      )}
       <div className="py-2">
         <Heading
           text="MAIN"
@@ -117,6 +123,7 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
           link="/home/reset-password"
           title="Reset Password"
         />
+
         <DesktopSideNavLinkItem
           isCollapse={props.isCollapse}
           isHover={props.isHover}
@@ -125,7 +132,7 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
               color={location.pathname === "/home/logout" ? "#F3C3F7" : "#fff"}
             />
           }
-          link="/home/logout"
+          onClick={() => setopenLogout(true)}
           title="Logout"
         />
       </div>
