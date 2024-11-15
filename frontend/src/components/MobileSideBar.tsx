@@ -17,7 +17,7 @@ const MobileSideBar = (props: {
     <div
       className={` ${
         !props.isCollapse
-          ? ` ${sidebarclass} bg-slate-900  text-textColor`
+          ? ` ${sidebarclass} bg-[#1A1B1C]  text-textColor`
           : `${sidebarclass} bg-clip-text text-transparent bg-gradient-to-r from-blue-700  via-[#F3C3F7] to-white`
       }   ${props.className}`}
     >
