@@ -1,0 +1,8 @@
+.breadcrumb-not-active {
+  color: rgb(51 65 85);
+}
+
+.breadcrumb-active {
+  color: #f3c3f7;
+  font-weight: "Roboto";
+}
