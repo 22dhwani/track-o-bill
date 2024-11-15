@@ -14,7 +14,7 @@ function LogoutModal(props: { onClose: () => void }) {
         >
           <Heading
             text="X"
-            headingclassname="items-end  text-slate-700 text-2xl font-roboto-semibold"
+            headingclassname="items-end  text-white text-2xl font-roboto-semibold"
             variant="headingTitle"
           />
         </Button>
