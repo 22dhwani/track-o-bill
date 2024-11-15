@@ -12,7 +12,7 @@ export default {
         // ...defaultTheme.screens,
       },
       colors: {
-        primaryPurple: "#F3C3F7",
+        primaryPurple: "#9333ea",
         primaeryYellow: "#FBE882",
         primaeryGreen: "#16a34a",
         mediumGray: "#7987a1",
