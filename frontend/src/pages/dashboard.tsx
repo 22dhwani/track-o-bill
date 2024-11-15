@@ -37,13 +37,12 @@ import SearchBar from "../components/SearchBar";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  useEffect(() => {
-    const token = Cookies.get('userToken');
-    if (!token) {
-      navigate('/home');
-    }
-  }, []);
-
+  // useEffect(() => {
+  //   const token = Cookies.get('userToken');
+  //   if (!token) {
+  //     navigate('/home');
+  //   }
+  // }, []);
 
   const [isCollapse, setIsCollapse] = useState<boolean>(true);
   const [isMobileCollapse, setIsMobileCollapse] = useState<boolean>(true);
@@ -142,7 +141,32 @@ const Dashboard: React.FC = () => {
     : " w-full overflow-y-scroll";
   const sidebarclass = sidebarcollapse + " " + sideBarHover;
   const mainbarclass = mainclasscollapse + " " + mainOnHover;
-
+  const people = [
+    {
+      name: "Earl e phant",
+      status: "You owe",
+      amount: "$50.00",
+      color: "text-green-600",
+    },
+    {
+      name: "Stompy",
+      status: "She owes",
+      amount: "$25.00",
+      color: "text-red-600",
+    },
+    {
+      name: "Oli Fant",
+      status: "He owes",
+      amount: "$56.00",
+      color: "text-red-600",
+    },
+    {
+      name: "Jeniffer",
+      status: "She owes",
+      amount: "$38.40",
+      color: "text-red-600",
+    },
+  ];
   const users = [
     {
       id: 1,
@@ -221,6 +245,36 @@ const Dashboard: React.FC = () => {
               </p>
               <Bar data={data} options={options} />
             </div>
+            <div className="bg-dimGray rounded-lg shadow p-6">
+              <div className="flex justify-between">
+                <h2 className="text-lg font-semibold  text-white">
+                  Monthly cost
+                </h2>
+                <select className="text-white bg-black p-2 outline-none rounded-lg font-semibold">
+                  <option>Jan</option>
+                  <option>Feb</option>
+                  <option>Mar</option>
+                  {/* Add other months as needed */}
+                </select>
+              </div>
+              <div className=" rounded-lg p-2 ">
+                <div className="flex justify-between items-center mb-4"></div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  {people.map((person, index) => (
+                    <div key={index} className="bg-black rounded-lg p-4 shadow">
+                      <p className="font-semibold text-white">{person.name}</p>
+                      <p className={`${person.color} text-sm font-medium`}>
+                        {person.status}
+                      </p>
+                      <p className="text-2xl font-bold text-white">
+                        {person.amount}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
           <div className="bg-dimGray rounded-lg shadow p-6 mb-5">
             <ReactChart label={"Analytics"} />
@@ -232,13 +286,13 @@ const Dashboard: React.FC = () => {
                 Customer movements
               </h2>
               <div className="flex items-center space-x-2">
-                <button className="px-4 py-2 bg-black text-white rounded-md">
+                <button className="px-4 py-2 bg-black font-bold text-white rounded-md">
                   View all
                 </button>
-                <button className="px-4 py-2 bg-primaryPurple text-white rounded-md">
+                <button className="px-4 py-2 bg-purple-600 font-bold text-white rounded-md">
                   Monitored
                 </button>
-                <button className="px-4 py-2 bg-primaryPurple text-white rounded-md">
+                <button className="px-4 py-2 bg-purple-600 font-bold text-white rounded-md">
                   Unmonitored
                 </button>
               </div>

@@ -45,7 +45,7 @@ const Button: FC<ButtonProps> = ({
       "  disabled:bg-gray-300 disabled:text-gray-500 active:shadow-inner text-textColor ";
   if (variant === "filled" && color === "primary")
     className +=
-      "bg-[#F3C3F7] text-white hover:bg-primaryBlue/80 hover:text-white";
+      "bg-[#9333ea] text-white hover:bg-primaryPurple/80 hover:text-white";
   if (variant === "filled" && color === "secondary")
     className +=
       "bg-blue-100 hover:bg-blue-200/90 active:bg-blue-200/90 !text-[#F3C3F7] ";
