@@ -9,7 +9,7 @@ function LogoutModal(props: { onClose: () => void }) {
       <div className="flex items-top">
         <Button
           variant="outlined"
-          buttonClassName="border-transparent hover:rounded-full hover:bg-gray-50  !px-3 h-max mb-2 ml-auto"
+          buttonClassName="border-transparent  bg-black  !px-3 h-max mb-2 ml-auto"
           onClick={() => props.onClose()}
         >
           <Heading

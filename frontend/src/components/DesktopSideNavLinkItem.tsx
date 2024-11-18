@@ -16,8 +16,8 @@ export default function DesktopSideNavLinkItem(props: {
           onClick={props.onClick}
           className={
             props.isCollapse || (!props.isCollapse && props.isHover)
-              ? `${styles.sidenavlinks}  tracking-wider box-border flex flex-row w-full font-roboto-semibold  font-semibold text-white text-sm `
-              : `${styles.sidenavlinks} tracking-wider box-border  w-full  font-roboto-semibold text-white text-sm flex items-center justify-center `
+              ? `${styles.sidenavlinks}  cursor-pointer  tracking-wider box-border flex flex-row w-full font-roboto-semibold  font-semibold text-white text-sm `
+              : `${styles.sidenavlinks} cursor-pointer tracking-wider box-border  w-full  font-roboto-semibold text-white text-sm flex items-center justify-center `
           }
         >
           <div
