@@ -51,7 +51,7 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
               }
             />
           }
-          link="/dashboard"
+          link="/home/dashboard"
           title="Dashboard"
         />
       </div>

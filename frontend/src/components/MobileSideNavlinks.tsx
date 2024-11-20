@@ -9,6 +9,10 @@ import {
   Answer,
 } from "./Icons";
 import Heading from "./Heading";
+import { useState } from "react";
+import Modal from "./Modal";
+import LogoutModal from "./LogoutModal";
+import ResetPasswordLayout from "./ResetPasswordLayout";
 
 const MobileSideNavLinks = (props: {
   isCollapse?: boolean;
@@ -16,6 +20,8 @@ const MobileSideNavLinks = (props: {
   isMobileCollapse: boolean;
   onCollapse: () => void;
 }) => {
+  const [openLogout, setopenLogout] = useState(false);
+  const [openReset, setopenReset] = useState(false);
   const mobileSideNavLinkClassName = `border-r-[0.3px] border-r-slate-200 bg-[#1A1B1C]   text-black lg:flex  flex-col font-normal   h-screen  xs:mt-[2vh] overflow-y-hidden overflow-x-hidden`;
   return (
     <div
@@ -23,6 +29,22 @@ const MobileSideNavLinks = (props: {
         !props.isMobileCollapse ? "xs:visible" : "xs:hidden"
       }`}
     >
+      {openLogout && (
+        <Modal className="!py-2">
+          <LogoutModal
+            onClose={() => {
+              setopenLogout(false);
+            }}
+          />
+        </Modal>
+      )}
+      {openReset && (
+        <ResetPasswordLayout
+          onClose={() => {
+            setopenReset(false);
+          }}
+        />
+      )}
       <div className="py-2">
         <Heading
           text="MAIN"
@@ -114,29 +136,17 @@ const MobileSideNavLinks = (props: {
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
         isHover={props.isHover ?? false}
-        link="/home/reset-password"
-        icon={
-          <Question
-            color={
-              location.pathname === "/home/reset-password" ? "#F3C3F7" : "#fff"
-            }
-          />
-        }
+        onClick={() => setopenReset(true)}
+        icon={<Question color={openReset ? "#F3C3F7" : "#fff"} />}
         title="Reset Password"
-        onClick={props.onCollapse}
       />
       <MobileSideNavLinkItem
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
         isHover={props.isHover ?? false}
-        link="/home/logout"
-        icon={
-          <Type
-            color={location.pathname === "/home/logout" ? "#F3C3F7" : "#fff"}
-          />
-        }
+        icon={<Type color={openLogout ? "#F3C3F7" : "#fff"} />}
+        onClick={() => setopenLogout(true)}
         title="Logout"
-        onClick={props.onCollapse}
       />
     </div>
   );
