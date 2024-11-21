@@ -8,6 +8,7 @@ import MyProfile from "./pages/MyProfile";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/dashboard";
 import Activity from "./pages/Activity";
+import Bill from "./pages/Bill";
 
 function App(): JSX.Element {
   return (
@@ -21,6 +22,7 @@ function App(): JSX.Element {
         <Route path="/home" element={<Layout />}>
           <Route index path="/home/dashboard" element={<Dashboard />} />
           <Route index path="/home/activity" element={<Activity />} />
+          <Route index path="/home/bills" element={<Bill />} />
           <Route path="/home/my-profile" element={<MyProfile />} />
         </Route>
 

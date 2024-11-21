@@ -14,7 +14,10 @@
   background: #7983a1;
   border-radius: 20px;
 }
-
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Inverts the icon color to white */
+  cursor: pointer; /* Ensures the pointer looks like a clickable element */
+}
 .libre-bold {
   font-family: "Libre Baskerville", serif;
   font-weight: 700;

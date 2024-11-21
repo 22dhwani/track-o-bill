@@ -153,6 +153,7 @@ function MyProfile() {
               <div>
                 <Label required label="About Me" className="ml-1 text-white" />
                 <TextArea
+                  placeholder="Tell us something about you"
                   row="15"
                   id="bio"
                   disabled
