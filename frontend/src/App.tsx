@@ -9,6 +9,7 @@ import Layout from "./pages/Layout";
 import Dashboard from "./pages/dashboard";
 import Activity from "./pages/Activity";
 import Bill from "./pages/Bill";
+import Groups from "./pages/Groups";
 
 function App(): JSX.Element {
   return (
@@ -24,6 +25,7 @@ function App(): JSX.Element {
           <Route index path="/home/activity" element={<Activity />} />
           <Route index path="/home/bills" element={<Bill />} />
           <Route path="/home/my-profile" element={<MyProfile />} />
+          <Route path="/home/groups" element={<Groups />} />
         </Route>
 
         {/* <Route path="*" element={<NotFoundPage />} /> */}
