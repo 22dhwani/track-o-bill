@@ -117,12 +117,12 @@ function ResetPasswordLayout({ onClose }: { onClose: () => void }) {
                     />
                   ) : null}
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 ">
                   <Button
                     color="gray"
                     variant="ghost"
                     size="small"
-                    buttonClassName="ml-auto px-6 py-2   w-max  font-normal rounded-sm text-md font-family-roboto  tracking-wide"
+                    buttonClassName="ml-auto px-6 py-2  mt-2  w-max  font-normal rounded-sm text-md font-family-roboto  tracking-wide"
                     onClick={async () => {
                       onClose();
                     }}
@@ -134,7 +134,7 @@ function ResetPasswordLayout({ onClose }: { onClose: () => void }) {
                     variant="filled"
                     size="small"
                     type="submit"
-                    buttonClassName="px-6 py-2 w-max   font-normal rounded-sm text-md font-family-roboto  tracking-wide"
+                    buttonClassName="px-6 py-2 w-max mt-2  font-normal rounded-sm text-md font-family-roboto  tracking-wide"
                   >
                     Reset
                   </Button>

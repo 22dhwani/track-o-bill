@@ -1,4 +1,4 @@
-import "../../styles/Input.css";
+import "../styles/Input.css";
 
 const Input = ({ ...props }) => {
   const inputClassName = `flex  items-center w-full   text-md   font-family-roboto text-textColor px-2 my-1    focus:ring-0 focus:border focus:border-sky-100  md:mx-0   border rounded-lg      ${props.className}`;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import Input from "./Input";
-import DownArrow from "../../assets/DownArrow.svg";
+import DownArrow from "../images/DownArrow.svg";
 import Error from "./Error";
 
 export interface PhoneSelectProps {
@@ -41,6 +41,7 @@ function MobileInput({
         disabled={false}
         value={selectedPerson}
         onChange={setSelectedPerson}
+        displayValue={(person: any) => `(+${person.id})`}
       >
         <div className="relative">
           <div className="flex rounded-[8px] border border-lightPurple ">

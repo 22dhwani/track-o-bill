@@ -19,7 +19,7 @@ const PasswordInput = ({ ...props }) => {
     setPasswordType("password");
     seticon(EyeOff);
   };
-  const passwordClassName = `flex items-center w-full dark:bg-black  focus:border-2 focus:border-sky-100 text-md w-full  font-family-roboto  text-textColor px-2 my-1    md:mx-0   border rounded-lg  ${props.className} `;
+  const passwordClassName = `flex items-center w-full bg-black  focus:border-2 focus:border-sky-100 text-md w-full  font-family-roboto  text-white px-2 my-1    md:mx-0   border rounded-lg  ${props.className} `;
 
   return (
     <div className={passwordClassName}>
@@ -29,7 +29,7 @@ const PasswordInput = ({ ...props }) => {
         value={passwordInput}
         onChange={handlePasswordChange}
         {...props}
-        className={`focus:outline-none font-family-roboto tracking-wide w-full ease-in focus:caret-primaryBlue  placeholder:font-family-roboto   placeholder:text-slate-400 placeholder:text-md  py-2.5 ${props.placeholderclassname}`}
+        className={`focus:outline-none bg-black font-family-roboto tracking-wide w-full ease-in focus:caret-primaryBlue  placeholder:font-family-roboto   placeholder:text-slate-400 placeholder:text-md  py-2.5 ${props.placeholderclassname}`}
       />
       <button className="ml-auto">
         <img src={icon} onClick={togglePassword} alt="eye" />
