@@ -1,153 +1,129 @@
 import React, { useState } from "react";
 
-function AddGroupModal() {
-  const [isOpen, setIsOpen] = useState<boolean>(false); // Modal open/close state
-  const [members, setMembers] = useState<string[]>([""]); // List of members, initially with one empty input
+type AddGroupModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddGroup: (group: { name: string; members: string[]; owe: string }) => void;
+};
 
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-  };
+const AddGroupModal: React.FC<AddGroupModalProps> = ({
+  isOpen,
+  onClose,
+  onAddGroup,
+}) => {
+  const [groupName, setGroupName] = useState("");
+  const [memberInput, setMemberInput] = useState("");
+  const [members, setMembers] = useState<string[]>([]);
 
   const handleAddMember = () => {
-    setMembers([...members, ""]); // Add a new empty member input field
+    if (memberInput.trim()) {
+      setMembers([...members, memberInput.trim()]);
+      setMemberInput(""); // Clear the input field after adding.
+    }
   };
 
-  const handleRemoveMember = (index: number) => {
-    const updatedMembers = members.filter((_, i) => i !== index);
-    setMembers(updatedMembers); // Remove the member from the list
+  const handleRemoveMember = (memberToRemove: string) => {
+    setMembers(members.filter((member) => member !== memberToRemove));
   };
 
-  const handleMemberChange = (index: number, value: string) => {
-    const updatedMembers = [...members];
-    updatedMembers[index] = value; // Update the value of the specific member input
-    setMembers(updatedMembers);
+  const handleSubmit = () => {
+    if (!groupName || members.length === 0) return;
+
+    onAddGroup({
+      name: groupName,
+      members,
+      owe: "$0", // Default owe amount.
+    });
+
+    // Reset the modal fields and close the modal.
+    setGroupName("");
+    setMembers([]);
+    onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
-    <>
-      <button
-        onClick={toggleModal}
-        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        Add Group
-      </button>
-
-      {/* Main modal */}
-      {isOpen && (
-        <div
-          className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen bg-gray-900 bg-opacity-50"
-          onClick={toggleModal}
+    <div className="modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="modal-content relative bg-dimGray text-white rounded-lg shadow-lg p-6 w-96">
+        {/* Close Button */}
+        <button
+          className="absolute top-2 right-2 text-white text-lg font-bold hover:text-gray-300"
+          onClick={onClose}
         >
-          <div
-            className="relative p-4 w-full max-w-md max-h-full bg-slate-700 rounded-lg shadow dark:bg-gray-700"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal content */}
-            <div className="relative">
-              {/* Modal header */}
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-lg font-semibold text-white">
-                  Create New Group
-                </h3>
-                <button
-                  type="button"
-                  onClick={toggleModal}
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  <svg
-                    className="w-3 h-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 14"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6"
-                    />
-                  </svg>
-                  <span className="sr-only">Close modal</span>
-                </button>
-              </div>
-              {/* Modal body */}
-              <form className="p-4 md:p-5">
-                <div className="grid gap-4 mb-4 grid-cols-2">
-                  <div className="col-span-2">
-                    <label
-                      htmlFor="groupName"
-                      className="block mb-2 text-sm font-medium text-white"
-                    >
-                      Group Name
-                    </label>
-                    <input
-                      type="text"
-                      name="groupName"
-                      id="groupName"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="Enter group name"
-                      required
-                    />
-                  </div>
+          &times;
+        </button>
 
-                  {/* Member Inputs */}
-                  <div className="col-span-2">
-                    <label
-                      htmlFor="members"
-                      className="block mb-2 text-sm font-medium text-white"
-                    >
-                      Members
-                    </label>
-                    <div
-                      className="max-h-48 overflow-y-auto rounded-lg dark:bg-gray-600 dark:border-gray-500"
-                      style={{ maxHeight: "200px" }}
-                    >
-                      {members.map((member, index) => (
-                        <div key={index} className="flex items-center mb-2">
-                          <input
-                            type="text"
-                            value={member}
-                            onChange={(e) =>
-                              handleMemberChange(index, e.target.value)
-                            }
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                            placeholder={`Member #${index + 1}`}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveMember(index)}
-                            className="ml-2 text-red-500 hover:text-red-700"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleAddMember}
-                      className="mt-2 text-blue-500 hover:text-blue-700"
-                    >
-                      + Add Member
-                    </button>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Add New Group
-                </button>
-              </form>
-            </div>
+        <h2 className="text-xl font-bold mb-4">Add New Group</h2>
+        <div className="mb-4">
+          <label className="block font-medium mb-1" htmlFor="groupName">
+            Group Name:
+          </label>
+          <input
+            id="groupName"
+            type="text"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block font-medium mb-1" htmlFor="memberInput">
+            Add Member:
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="memberInput"
+              type="text"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              value={memberInput}
+              onChange={(e) => setMemberInput(e.target.value)}
+            />
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              onClick={handleAddMember}
+            >
+              Add
+            </button>
           </div>
         </div>
-      )}
-    </>
+        <div className="mb-4">
+          <h3 className="font-medium mb-2">Members:</h3>
+          {members.length > 0 ? (
+            <ul className="list-disc pl-5 space-y-1">
+              {members.map((member, index) => (
+                <li key={index} className="flex justify-between items-center">
+                  {member}
+                  <button
+                    className="text-red-500 hover:underline"
+                    onClick={() => handleRemoveMember(member)}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No members added yet.</p>
+          )}
+        </div>
+        <div className="flex justify-end gap-4">
+          <button
+            className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={handleSubmit}
+          >
+            Add Group
+          </button>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
 export default AddGroupModal;
