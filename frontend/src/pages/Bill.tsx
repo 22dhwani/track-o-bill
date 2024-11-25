@@ -4,6 +4,7 @@ import Heading from "../components/Heading";
 import Button from "../components/Button";
 import BillModal from "./BillModal";
 import AddMemberModal from "../components/AddMemberModal";
+import SettleUpModal from "../components/SettleUpModal";
 import Input from "../components/Input";
 
 function Bill() {
@@ -72,7 +73,7 @@ function Bill() {
   });
   const [openBill, setopenBill] = useState(false);
   const [openAddMember, setOpenAddMember] = useState(false);
-
+  const [openSettleUp, setopenSettleUp] = useState(false);
   return (
     <>
       <Card className=" bg-transparent min-h-screen">
@@ -84,6 +85,14 @@ function Bill() {
             }}
           />
         )}
+        {openSettleUp && (
+          <SettleUpModal
+            open={openSettleUp}
+            onClose={() => {
+              setopenSettleUp(false);
+            }}
+          />
+        )}
         <div className="flex justify-between lg:items-center">
           <Heading
             text="Your Bills"
@@ -92,7 +101,7 @@ function Bill() {
           />
           <div className="flex gap-4">
             <Button
-              onClick={() => setopenBill(true)}
+              onClick={() => setopenSettleUp(true)}
               type="submit"
               variant="filled"
               color="primary"
