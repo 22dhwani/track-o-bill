@@ -80,7 +80,7 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
           link="/home/groups"
           title="Groups"
         />
-        <DesktopSideNavLinkItem
+        {/* <DesktopSideNavLinkItem
           isCollapse={props.isCollapse}
           isHover={props.isHover}
           icon={
@@ -90,7 +90,7 @@ const SideNavLinks = (props: { isCollapse: boolean; isHover: boolean }) => {
           }
           link="/home/bills"
           title="Bills"
-        />
+        /> */}
         <DesktopSideNavLinkItem
           isCollapse={props.isCollapse}
           isHover={props.isHover}

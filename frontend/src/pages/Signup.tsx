@@ -6,44 +6,46 @@ import Cookies from "js-cookie";
 // Define the UserInfo interface
 interface UserInfo {
   firstName: string | null; // Allow null since FormData.get can return null
-  lastName: string | null;  // Allow null since FormData.get can return null
-  username: string | null;   // Allow null since FormData.get can return null
-  email: string | null;      // Allow null since FormData.get can return null
-  password: string | null;   // Allow null since FormData.get can return null
-  terms: boolean | null;     // Assuming terms is a checkbox, it can be true or false
+  lastName: string | null; // Allow null since FormData.get can return null
+  username: string | null; // Allow null since FormData.get can return null
+  email: string | null; // Allow null since FormData.get can return null
+  password: string | null; // Allow null since FormData.get can return null
+  terms: boolean | null; // Assuming terms is a checkbox, it can be true or false
 }
 interface SignUpResponse {
   token: string; // Add token property
   // ... other properties if needed
 }
-  // Function to check if the password and confirm password are correct
-  const validatePassword = (event: React.FormEvent<HTMLFormElement>) => {
-    const formData = new FormData(event.currentTarget);
-    const password = formData.get("password") as string; // Cast to string
-    const confirmPassword = formData.get("confirmPassword") as string; // Cast to string
+// Function to check if the password and confirm password are correct
+const validatePassword = (event: React.FormEvent<HTMLFormElement>) => {
+  const formData = new FormData(event.currentTarget);
+  const password = formData.get("password") as string; // Cast to string
+  const confirmPassword = formData.get("confirmPassword") as string; // Cast to string
 
-    // Check for empty fields
-    if (!password || !confirmPassword) {
-        alert("Please fill in both password fields.");
-        event.preventDefault();
-        return false;
-    }
+  // Check for empty fields
+  if (!password || !confirmPassword) {
+    alert("Please fill in both password fields.");
+    event.preventDefault();
+    return false;
+  }
 
-    // Check password strength
-    const passwordStrengthRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/; // At least 8 characters, 1 number, 1 special character
-    if (!passwordStrengthRegex.test(password)) {
-        alert("Password must be at least 8 characters long and include a number and a special character.");
-        event.preventDefault();
-        return false;
-    }
+  // Check password strength
+  const passwordStrengthRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/; // At least 8 characters, 1 number, 1 special character
+  if (!passwordStrengthRegex.test(password)) {
+    alert(
+      "Password must be at least 8 characters long and include a number and a special character."
+    );
+    event.preventDefault();
+    return false;
+  }
 
-    // Check if passwords match
-    if (password !== confirmPassword) {
-        alert("Password and confirm password do not match");
-        event.preventDefault();
-        return false;
-    }
-    return true;
+  // Check if passwords match
+  if (password !== confirmPassword) {
+    alert("Password and confirm password do not match");
+    event.preventDefault();
+    return false;
+  }
+  return true;
 };
 
 const Signup: React.FC = () => {
@@ -58,28 +60,34 @@ const Signup: React.FC = () => {
     const formData = new FormData(event.currentTarget); // Get form data
     const isValid = validatePassword(event);
     if (!isValid) {
-        return;
+      return;
     }
     const userInfo: UserInfo = {
       firstName: formData.get("firstName") as string | null,
-      lastName: formData.get("lastName") as string | null,  
-      username: formData.get("username") as string | null,  
-      email: formData.get("email") as string | null,        
-      password: formData.get("password") as string | null,  
-      terms: formData.get("terms") === 'on',
+      lastName: formData.get("lastName") as string | null,
+      username: formData.get("username") as string | null,
+      email: formData.get("email") as string | null,
+      password: formData.get("password") as string | null,
+      terms: formData.get("terms") === "on",
     };
 
     try {
       // Dispatch user data to the slice and catch the response
-      const response = await signUp(userInfo) as unknown as { data: SignUpResponse };
-      console.log('Sign up successful:', response);
+      const response = (await signUp(userInfo)) as unknown as {
+        data: SignUpResponse;
+      };
+      console.log("Sign up successful:", response);
 
-      Cookies.set('userToken', response?.data?.token, { secure: true, sameSite: "Strict", expires: 7 });
-      navigate('/dashboard');
+      Cookies.set("userToken", response?.data?.token, {
+        secure: true,
+        sameSite: "Strict",
+        expires: 7,
+      });
+      navigate("/home/dashboard");
       // Optionally, you can redirect or show a success message here
-    } catch (error : any) {
-      console.error('Sign up failed:', error.message);
-      alert('Sign up failed. Please try again.'); // Show an error message to the user
+    } catch (error: any) {
+      console.error("Sign up failed:", error.message);
+      alert("Sign up failed. Please try again."); // Show an error message to the user
     }
     // Clear the form fields
     if (formRef.current) {

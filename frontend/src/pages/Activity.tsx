@@ -103,12 +103,12 @@ function Activity() {
     { name: "Karan", email: "karan@example.com" },
   ]);
 
-  const removeFriend = (index) => {
+  const removeFriend = (index: any) => {
     const updatedFriends = friends.filter((_, i) => i !== index);
     setFriends(updatedFriends);
   };
 
-  const connectFriend = (index) => {
+  const connectFriend = (index: any) => {
     const newFriend = peopleToAdd[index];
     setFriends([...friends, newFriend]);
     const updatedPeople = peopleToAdd.filter((_, i) => i !== index);
