@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 //import Sidebar from "../components/SideNav";
 
 import { Bar } from "react-chartjs-2";
@@ -25,8 +24,11 @@ ChartJS.register(
 import Heading from "../components/Heading.tsx";
 import Card from "../components/Card.tsx";
 import SearchBar from "../components/SearchBar.tsx";
+import { useGetUserQuery } from "../features/api/userSlice.ts";
 
 function Dashboard() {
+  const { data: userData, isLoading, error } = useGetUserQuery();
+  console.log(userData);
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
     datasets: [

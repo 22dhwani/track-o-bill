@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import Heading from "../components/Heading";
 import Button from "../components/Button";
 import AddGroupModal from "../components/AddGroupModal";
+import { useGetGroupsQuery } from "../features/api/groupSlice";
 
 type Group = {
   name: string;
@@ -12,6 +13,8 @@ type Group = {
 };
 
 function Groups() {
+  const { data: groupsData, isLoading, error } = useGetGroupsQuery();
+  console.log(groupsData);
   const [groups, setGroups] = useState<Group[]>([
     {
       name: "Friends",

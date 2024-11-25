@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import rootReducer from './rootReducer';
 import signupSlice from '../features/api/signupSlice';
+import groupSlice from '../features/api/groupSlice';
+import { userSlice } from '../features/api/userSlice';
 
 // Create the store
 const store = configureStore({
@@ -9,7 +11,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(signupSlice.middleware),
+    }).concat(signupSlice.middleware, groupSlice.middleware, userSlice.middleware),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
