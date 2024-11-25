@@ -27,11 +27,11 @@ function App(): JSX.Element {
         <Route path="/home" element={<Layout />}>
           <Route index path="/home/dashboard" element={<Dashboard />} />
           <Route path="/home/activity" element={<Activity />} />
-          <Route path="/home/bills" element={<Bill />} />
+          {/* <Route path="/home/bills" element={<Bill />} /> */}
           <Route path="/home/my-profile" element={<MyProfile />} />
           <Route path="/home/groups" element={<Groups />} />
           {/* New Route for Group Detail */}
-          <Route path="/home/groups/:groupId" element={<GroupDetail />} />
+          <Route path="/home/groups/:groupId/bills" element={<Bill />} />
         </Route>
 
         {/* Fallback Route */}

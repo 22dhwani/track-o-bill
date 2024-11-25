@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 //import Sidebar from "../components/SideNav";
 
-import SideNav from "../components/SideNav.tsx";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -22,9 +21,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import Topbar from "../components/TopBar.tsx";
+
 import Heading from "../components/Heading.tsx";
 import Card from "../components/Card.tsx";
 import SearchBar from "../components/SearchBar.tsx";

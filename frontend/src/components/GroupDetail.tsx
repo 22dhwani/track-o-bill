@@ -72,7 +72,7 @@ function GroupDetail() {
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
-          className="bg-transparent text-white px-3 py-2 rounded-full mr-4 hover:bg-gray-700"
+          className="bg-transparent  text-white px-3 py-2 rounded-full mr-4 bg-gray-700"
         >
           Back
         </button>

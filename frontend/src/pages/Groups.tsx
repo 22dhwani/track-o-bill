@@ -38,13 +38,13 @@ function Groups() {
   };
 
   const handleCardClick = (groupName: string) => {
-    navigate(`/home/groups/${groupName}`);
+    navigate(`/home/groups/${groupName}/bills`);
   };
 
   return (
     <>
       <Card className="bg-transparent text-white !overflow-x-clip h-max">
-        <div className="p-6 min-h-screen">
+        <div className="min-h-screen">
           <div className="flex justify-between items-center mb-4">
             <Heading
               variant="bigTitle"

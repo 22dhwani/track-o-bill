@@ -58,7 +58,7 @@ function Bill() {
     },
   ]);
   const buttonClassName =
-    "   w-max   xs:mx-auto md:mx-0  rounded-sm text-sm font-family-roboto tracking-wide ";
+    "   w-max  !border-none xs:mx-auto md:mx-0  rounded-sm text-sm font-family-roboto tracking-wide ";
   const [searchSuggestions] = useState([
     { type: "user", name: "Olivia Rhye", avatar: "path/to/avatar1.png" },
     { type: "user", name: "Oliver Wilkinson", avatar: "path/to/avatar2.png" },
@@ -87,16 +87,28 @@ function Bill() {
           variant="bigTitle"
           headingclassname="text-white"
         />
-        <Button
-          onClick={() => setopenBill(true)}
-          type="submit"
-          variant="filled"
-          color="primary"
-          buttonClassName={buttonClassName}
-          centerclassname="flex justify-center items-center"
-        >
-          Add Bill
-        </Button>
+        <div className="flex gap-4">
+          <Button
+            onClick={() => setopenBill(true)}
+            type="submit"
+            variant="filled"
+            color="primary"
+            buttonClassName={buttonClassName + " bg-green-500 "}
+            centerclassname="flex justify-center items-center"
+          >
+            Settle Up
+          </Button>
+          <Button
+            onClick={() => setopenBill(true)}
+            type="submit"
+            variant="filled"
+            color="primary"
+            buttonClassName={buttonClassName}
+            centerclassname="flex justify-center items-center"
+          >
+            Add Bill
+          </Button>
+        </div>
       </div>
 
       <div className="bg-dimGray my-5 shadow-md rounded-lg p-5">
@@ -104,40 +116,11 @@ function Bill() {
         <div className="flex flex-wrap items-center justify-between space-y-4 lg:space-y-0 lg:space-x-4">
           {/* Search Bar */}
           <div className="relative w-full lg:w-1/3">
-            <Input
-              type="text"
-              className="w-full px-4  border border-gray-300 rounded-lg focus:outline-none focus:ring-2  text-white focus:ring-blue-400 bg-black"
-              placeholder="Search by name, ID, or file"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+            <Heading
+              variant="subTitle"
+              text="You are owed $14.5 overall"
+              headingclassname=" !text-red-500  font-semibold"
             />
-            {searchQuery && (
-              <div className="absolute top-12 left-0 w-full bg-black shadow-lg rounded-lg z-10">
-                {searchSuggestions
-                  .filter((item) =>
-                    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-                  )
-                  .map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className="flex text-white items-center p-3 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {suggestion.type === "user" ? (
-                        <img
-                          src={suggestion.avatar}
-                          alt={suggestion.name}
-                          className="w-8 h-8 rounded-full mr-3"
-                        />
-                      ) : (
-                        <span className="w-8 h-8 bg-black flex items-center justify-center rounded-full mr-3">
-                          📄
-                        </span>
-                      )}
-                      <span>{suggestion.name}</span>
-                    </div>
-                  ))}
-              </div>
-            )}
           </div>
 
           {/* Filter Buttons */}

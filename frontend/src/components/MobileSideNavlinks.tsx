@@ -91,7 +91,7 @@ const MobileSideNavLinks = (props: {
         title="Groups"
         onClick={props.onCollapse}
       />
-      <MobileSideNavLinkItem
+      {/* <MobileSideNavLinkItem
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
         isHover={props.isHover ?? false}
@@ -103,7 +103,7 @@ const MobileSideNavLinks = (props: {
         }
         title="Bills"
         onClick={props.onCollapse}
-      />
+      /> */}
       <MobileSideNavLinkItem
         isMobileCollapse={props.isMobileCollapse}
         isCollapse={props.isCollapse ?? false}
