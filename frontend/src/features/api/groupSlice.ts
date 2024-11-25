@@ -5,6 +5,10 @@ import Cookies from 'js-cookie';
 interface GroupData {
     group_name: string;
 }
+interface MemberData {
+    email_id: string;
+    group_id: number;
+}
 const groupSlice = createApi({
     reducerPath: 'groupSlice',
     baseQuery: fetchBaseQuery({
@@ -39,8 +43,27 @@ const groupSlice = createApi({
         invalidatesTags: [{ type: 'Group', id: 'LIST' }], // Adjust the type and id as necessary
 
     }),
+    joinGroup: builder.mutation<MemberData, MemberData>({
+        query: (memberData) => ({
+            url: '/join_group',
+            method: 'POST',
+            body: memberData,
+        }),
+        transformResponse: (response: MemberData) => response,
+        async onQueryStarted(_, { dispatch, queryFulfilled }) {
+            try {
+                await queryFulfilled;
+                dispatch(userSlice.util.invalidateTags(['User']));
+            } catch (error) {
+                console.error('Failed to join group:', error);
+            }
+        },
+        
+        invalidatesTags: [{ type: 'Group', id: 'LIST' }], // Adjust the type and id as necessary
+
+    }),
     }),
 });
 
-export const { useCreateGroupMutation } = groupSlice;
+export const { useCreateGroupMutation, useJoinGroupMutation } = groupSlice;
 export default groupSlice;

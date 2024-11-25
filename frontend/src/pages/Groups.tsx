@@ -4,8 +4,8 @@ import Card from "../components/Card";
 import Heading from "../components/Heading";
 import Button from "../components/Button";
 import AddGroupModal from "../components/AddGroupModal";
-import { useGetUserGroupsQuery, useGetUserQuery } from "../features/api/userSlice";
-
+import { useGetUserQuery } from "../features/api/userSlice";
+import { useGroup } from "../context/GroupContext";
 
 type Group = {
   name: string;
@@ -14,6 +14,7 @@ type Group = {
 };
 
 function Groups() {
+  const { setGroupName, setGroupId } = useGroup();
   const { data: userData, isLoading, error } = useGetUserQuery();
   console.log(userData);
   //const { data: groupsData, isLoading: groupsLoading, error: groupsError } = useGetUserGroupsQuery(userData?.groups_joined[0]);
@@ -42,9 +43,20 @@ function Groups() {
   const handleAddGroup = (newGroup: Group) => {
     setGroups([...groups, newGroup]);
   };
+  const findGroupPosition = (groupName: string) => {
+    return userData?.groups?.findIndex(group => group === groupName) ?? -1;
+  };
 
-  const handleCardClick = (groupName: string) => {
-    navigate(`/home/groups/${groupName}/bills`);
+  const handleCardClick = (group: string) => {
+    
+    if (!userData?.groups) return;
+    
+    const groupPosition = findGroupPosition(group);
+    console.log(groupPosition);
+    console.log(userData?.groups_joined);
+    setGroupName(group);
+    setGroupId(userData?.groups_joined[groupPosition]);
+    navigate(`/home/groups/${group}/bills`);
   };
 
   return (
@@ -72,7 +84,9 @@ function Groups() {
               <div
                 key={index}
                 className="group-card cursor-pointer"
-                onClick={() => handleCardClick(group.name)}
+                onClick={() => {
+                  handleCardClick(group);
+                }}
               >
                 <div className="card-inner">
                   {/* Front Side */}

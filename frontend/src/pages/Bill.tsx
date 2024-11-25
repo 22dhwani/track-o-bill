@@ -72,6 +72,7 @@ function Bill() {
   });
   const [openBill, setopenBill] = useState(false);
   const [openAddMember, setOpenAddMember] = useState(false);
+  
 
   return (
     <>
