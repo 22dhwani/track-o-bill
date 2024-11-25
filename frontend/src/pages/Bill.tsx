@@ -93,7 +93,9 @@ function Bill() {
             type="submit"
             variant="filled"
             color="primary"
-            buttonClassName={buttonClassName + " bg-green-500 "}
+            buttonClassName={
+              buttonClassName + " bg-green-500 hover:bg-green-700"
+            }
             centerclassname="flex justify-center items-center"
           >
             Settle Up
@@ -117,7 +119,7 @@ function Bill() {
           {/* Search Bar */}
           <div className="relative w-full lg:w-1/3">
             <Heading
-              variant="subTitle"
+              variant="headingTitle"
               text="You are owed $14.5 overall"
               headingclassname=" !text-red-500  font-semibold"
             />
