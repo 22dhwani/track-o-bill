@@ -13,6 +13,7 @@ interface UserData {
 // Define a service using a base URL and expected endpoints
 export const userSlice = createApi({
     reducerPath: 'userSlice',
+    tagTypes: ['User'],
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8000',
         prepareHeaders: (headers) => {
@@ -40,10 +41,25 @@ export const userSlice = createApi({
             },
             transformResponse: (response: UserData) => response,
         }),
+        getUserGroups: builder.query<UserData, void>({
+            query: (group_id) => `user/${group_id}`,
+            // Lifecycle methods
+            onQueryStarted: async (_, { queryFulfilled }) => {
+                try {
+                    const { data } = await queryFulfilled;
+                    // Handle successful fetch
+                    console.log('User fetched successfully:', data);
+                } catch (error) {
+                    // Handle error
+                    console.error('Failed to fetch user:', error);
+                }
+            },
+            transformResponse: (response: UserData) => response,
+        }),
     }),
 });
 
 // Export hooks for usage in functional components
 
 
-export const { useGetUserQuery } = userSlice;
+export const { useGetUserQuery, useGetUserGroupsQuery } = userSlice;

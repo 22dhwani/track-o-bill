@@ -4,7 +4,8 @@ import Card from "../components/Card";
 import Heading from "../components/Heading";
 import Button from "../components/Button";
 import AddGroupModal from "../components/AddGroupModal";
-import { useGetGroupsQuery } from "../features/api/groupSlice";
+import { useGetUserGroupsQuery, useGetUserQuery } from "../features/api/userSlice";
+
 
 type Group = {
   name: string;
@@ -13,8 +14,10 @@ type Group = {
 };
 
 function Groups() {
-  const { data: groupsData, isLoading, error } = useGetGroupsQuery();
-  console.log(groupsData);
+  const { data: userData, isLoading, error } = useGetUserQuery();
+  console.log(userData);
+  //const { data: groupsData, isLoading: groupsLoading, error: groupsError } = useGetUserGroupsQuery(userData?.groups_joined[0]);
+  //console.log(groupsData);
   const [groups, setGroups] = useState<Group[]>([
     {
       name: "Friends",
@@ -65,7 +68,7 @@ function Groups() {
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {groups.map((group, index) => (
+            {userData?.groups.map((group, index) => (
               <div
                 key={index}
                 className="group-card cursor-pointer"
@@ -74,8 +77,8 @@ function Groups() {
                 <div className="card-inner">
                   {/* Front Side */}
                   <div className="card-front shadow-md rounded-lg p-4 bg-dimGray border border-gray-300">
-                    <h2 className="text-xl font-bold mb-2">{group.name}</h2>
-                    <p className="text-white">
+                    <h2 className="text-xl font-bold mb-2">{group}</h2>
+                    {/*<p className="text-white">
                       <span className="font-medium">Total Members:</span>{" "}
                       {group.members.length}
                     </p>
@@ -88,7 +91,7 @@ function Groups() {
                       >
                         {group.owe}
                       </span>
-                    </p>
+                    </p>*/}
                   </div>
                 </div>
               </div>

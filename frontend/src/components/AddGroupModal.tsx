@@ -128,7 +128,7 @@
 
 // export default AddGroupModal;
 
-
+import { useCreateGroupMutation } from "../features/api/groupSlice";
 import React, { useEffect, useState } from "react";
 
 type AddGroupModalProps = {
@@ -143,25 +143,29 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
   onAddGroup,
 }) => {
   const [groupName, setGroupName] = useState("");
+  const [createGroup] = useCreateGroupMutation();
 
-  const handleSubmit = () => {
-    if (!groupName) return; // Ensure that group name is provided
+  const handleSubmit = async () => {
+    if (!groupName) return;
 
     onAddGroup({
       name: groupName,
-      members: [], // Empty array since no members are being added
-      owe: "$0", // Default owe amount
+      members: [],
+      owe: "$0",
     });
-
-    // Reset the modal fields and close the modal
+    
+    await createGroup({ group_name: groupName });
+    window.location.reload();
     setGroupName("");
     onClose();
   };
+
   useEffect(() => {
     if (!isOpen) {
       setGroupName("");
     }
   }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
