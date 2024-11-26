@@ -13,6 +13,7 @@ import Input from "../components/Input";
 import { useGroup } from "../context/GroupContext";
 import { useListAllTransactionsQuery } from "../features/api/transactionSlice";
 import { useGetSettleUpDataQuery } from "../features/api/settleUpSlice";
+import { useTransaction } from "../context/transactionContext";
 
 interface Transaction {
   transaction_id: number;
@@ -31,6 +32,8 @@ interface TransactionData {
   detail: Transaction[]; 
 }
 function Bill() {
+
+  const { setTransactionId } = useTransaction();
   
   const [searchQuery, setSearchQuery] = useState("");
   const { groupId } = useGroup();
@@ -216,8 +219,8 @@ function Bill() {
             <div className="relative w-full lg:w-1/3">
               <Heading
                 variant="headingTitle"
-                text= { settleUpData?.bill[0] > 0 ? `You are owed $${settleUpData?.bill[0]} overall` : `You owe $${settleUpData?.bill[0]} overall`}
-                headingclassname={` !text-${settleUpData?.bill[0] > 0 ? "green" : "red"}-500  font-semibold`}
+                text= { settleUpData?.bill[0] ? settleUpData?.bill[0] >= 0 ? `You are owed $${settleUpData?.bill[0]} overall` : `You owe $${settleUpData?.bill[0]} overall` : "You owe nothing"}
+                headingclassname={` !text-${settleUpData?.bill[0] ? settleUpData?.bill[0] >= 0 ? "green" : "red" : "green"}-500  font-semibold`}
               />
             </div>
 
@@ -278,7 +281,9 @@ function Bill() {
                     <td className="p-4  text-right">{transaction.total_amount}</td>
                     <div className="inline-flex items-center ml-4 space-x-2 gap-2">
                       {/* Edit SVG */}
-                      <button className="hover:text-blue-500" onClick={() => setopenEditBill(true)}>
+                      <button className="hover:text-blue-500" onClick={() => {
+                        setopenEditBill(true);
+                      }}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 512 512"
@@ -289,7 +294,11 @@ function Bill() {
                         </svg>
                       </button>
                       {/* Delete SVG */}
-                      <button className="hover:text-red-500" onClick={() => setopenDeleteBill(true)}>
+                      <button className="hover:text-red-500" onClick={() => {
+                        console.log(transaction.transaction_id);
+                        setopenDeleteBill(true);
+                        setTransactionId(transaction.transaction_id.toString());
+                      }}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 448 512"

@@ -599,11 +599,13 @@ class RemoveTransactionView(APIView):
     authentication_classes = [TokenAuthentication]
     
     def post(self,request,format=None):
+        print("entered")
+        print(request.data)
         form = RemoveTransactionForm(request.data)
         
         if form.is_valid():
             transaction = get_object_or_404(Transaction,id=form.cleaned_data['transaction_id'])
-            transaction.bill.delete()
+            # transaction.bill.delete()
             transaction.delete() 
             return JsonResponse({"detail":"Transaction Removed"}, status = 200)
         else:

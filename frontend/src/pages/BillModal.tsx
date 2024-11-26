@@ -228,6 +228,7 @@ const BillModal: React.FC<BillModalProps> = ({ open, onClose }) => {
     };
     try { 
       await createTransaction(transactionData);
+      window.location.reload();
       onClose();
     } catch (error: any) {
       console.error('Error creating transaction:', error.data.detail);

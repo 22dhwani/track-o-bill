@@ -78,9 +78,25 @@ const transactionSlice = createApi({
                 }
             },
         }),
+        deleteTransaction: builder.mutation<TransactionResponse, number>({
+            query: (transaction_id) => ({
+                url: `/remove_transaction`,
+                method: 'POST',
+                body: {transaction_id},
+            }),
+            transformResponse: (response: TransactionResponse) => response,
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    window.location.reload();
+                } catch (error) {
+                    console.error("Error deleting transaction:", error);
+                }
+            },          
+        }),
     }),
     
 });
 
-export const { useCreateTransactionMutation, useListAllTransactionsQuery } = transactionSlice;
+export const { useCreateTransactionMutation, useListAllTransactionsQuery, useDeleteTransactionMutation   } = transactionSlice;
 export default transactionSlice; 

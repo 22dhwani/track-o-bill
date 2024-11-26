@@ -6,10 +6,13 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { MenuProps } from "@mui/material";
 import Input from "../components/Input";
+import { useDeleteTransactionMutation } from "../features/api/transactionSlice";
+import { useTransaction } from "../context/transactionContext";
 
 interface DeleteTransModalProps {
     open: boolean;
     onClose: () => void;
+    transaction_id: number;
 }
 
 
@@ -29,6 +32,20 @@ const modalStyle = {
 };
 
 const DeleteTransModal: React.FC<DeleteTransModalProps> = ({ open, onClose }) => {
+    const [deleteTransaction] = useDeleteTransactionMutation();  
+    const { transactionId } = useTransaction();
+    console.log(transactionId);
+
+
+    const handleSubmit = async () => {
+        try {   
+            await deleteTransaction(Number(transactionId)).unwrap();
+            onClose();
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+        }
+    }
 
 
     // Custom MenuProps to apply white text
@@ -78,7 +95,7 @@ const DeleteTransModal: React.FC<DeleteTransModalProps> = ({ open, onClose }) =>
                     </button>
                     <button
                         className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    // onClick={handleSubmit}
+                    onClick={handleSubmit}
                     >
                         Delete
                     </button>

@@ -6,6 +6,8 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { MenuProps } from "@mui/material";
 import Input from "../components/Input";
+import { useLeaveGroupMutation } from "../features/api/groupSlice";
+import { useGroup } from "../context/GroupContext";
 
 interface LeaveGroupModalProps {
     open: boolean;
@@ -30,6 +32,18 @@ const modalStyle = {
 
 const LeaveGroupModal: React.FC<LeaveGroupModalProps> = ({ open, onClose }) => {
 
+    const [leaveGroup] = useLeaveGroupMutation();
+    const { groupId } = useGroup();
+
+    const handleSubmit = async () => {
+        try {
+            await leaveGroup(Number(groupId)).unwrap();
+            onClose();
+            window.location.reload();
+        } catch (error) {
+            console.error("Error leaving group:", error);
+        }
+    }
 
     // Custom MenuProps to apply white text
     const customMenuProps: Partial<MenuProps> = {
@@ -78,7 +92,7 @@ const LeaveGroupModal: React.FC<LeaveGroupModalProps> = ({ open, onClose }) => {
                     </button>
                     <button
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    // onClick={handleSubmit}
+                        onClick={handleSubmit}
                     >
                         Leave
                     </button>

@@ -62,8 +62,24 @@ const groupSlice = createApi({
         invalidatesTags: [{ type: 'Group', id: 'LIST' }], // Adjust the type and id as necessary
 
     }),
+    leaveGroup: builder.mutation<MemberData, Number>({
+        query: (group_id) => ({
+            url: '/leave_group',
+            method: 'POST',
+            body: {group_id},
+        }),
+        transformResponse: (response: MemberData) => response,
+        async onQueryStarted(_, { dispatch, queryFulfilled }) {
+            try {
+                await queryFulfilled;
+                window.location.reload();
+            } catch (error) {
+                console.error('Failed to leave group:', error);
+            }
+        },
+    }),
     }),
 });
 
-export const { useCreateGroupMutation, useJoinGroupMutation } = groupSlice;
+export const { useCreateGroupMutation, useJoinGroupMutation, useLeaveGroupMutation } = groupSlice;
 export default groupSlice;
