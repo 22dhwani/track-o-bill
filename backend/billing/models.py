@@ -38,6 +38,9 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     email = models.EmailField(max_length=50, unique=True)
     username = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    image = models.ImageField(upload_to='user_images/', blank=True, null=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
     is_staff = models.BooleanField(default=False)
@@ -68,6 +71,7 @@ class Bill(models.Model):
     image = models.ImageField(upload_to="bills/", null=True, blank=True)  # Store the image of the bill
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount of the bill
     tax = models.DecimalField(max_digits=10, decimal_places=2)
+    items = models.JSONField(default=list, null=True)
 
     def __str__(self):
         return f"Bill {self.id} - Amount: {self.amount}"
