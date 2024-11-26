@@ -668,6 +668,61 @@ class ListAllTransactionsView(APIView):
         # else:
         #     return JsonResponse({"detail":"Please Provide group_id as integer"}, status = 404)
 
+# Single Transaction View
+class GetSingleTransactionView(APIView):
+    """
+    This will retrieve details of a single transaction based on the transaction ID.
+
+    # Parameters
+    - `transaction_id (integer): The ID of the transaction you want to retrieve.`
+
+    # Headers 
+    - `{"Authorization": "token {auth_token}"}`
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get(self, request, format=None):
+        transaction_id = request.data.get('transaction_id')
+        
+        if transaction_id:
+            try:
+                # Fetch the transaction using the transaction ID
+                transaction = get_object_or_404(Transaction, id=transaction_id)
+                user = request.user
+
+                # Check if the user is part of the group associated with the transaction
+                if transaction.group.id not in user.groups_joined:
+                    return JsonResponse({"detail": "User should be in the group."}, status=403)
+
+                # Fetch names of all users involved
+                users_involved = [
+                    get_object_or_404(AppUser, user_id=user_id).username 
+                    for user_id in transaction.users_involved
+                ]
+
+                data = {
+                    "transaction_id": transaction.id,
+                    "name": transaction.name,
+                    "bill_id": transaction.bill.id,
+                    "payer": transaction.payer.username,
+                    "payer_id": transaction.payer.user_id,
+                    "transaction_adder_id": transaction.transaction_adder.user_id,
+                    "transaction_adder": transaction.transaction_adder.username,
+                    "users_involved_id": transaction.users_involved,
+                    "users_involved": users_involved,
+                    "amount_users_own": transaction.amount_users_own,
+                    "total_amount": transaction.total_amount,
+                    "date": transaction.created_at
+                }
+
+                return JsonResponse({"detail": data}, status=200)
+
+            except Exception as e:
+                return JsonResponse({"detail": str(e)}, status=400)
+
+        return JsonResponse({"detail": "Please provide a valid transaction_id."}, status=400)
+
 # edit transaction
 class EditTransactionsView(APIView):
     """
