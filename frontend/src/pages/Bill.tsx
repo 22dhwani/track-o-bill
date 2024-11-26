@@ -220,7 +220,8 @@ function Bill() {
               <Heading
                 variant="headingTitle"
                 text= { settleUpData?.bill[0] ? settleUpData?.bill[0] >= 0 ? `You are owed $${settleUpData?.bill[0]} overall` : `You owe $${settleUpData?.bill[0]} overall` : "You owe nothing"}
-                headingclassname={` !text-${settleUpData?.bill[0] ? settleUpData?.bill[0] >= 0 ? "green" : "red" : "green"}-500  font-semibold`}
+                // headingclassname={` !text-${settleUpData?.bill[0] >= 0 ? "green" : "red"}-500  font-semibold`}
+                headingclassname={settleUpData?.bill[0] ? settleUpData?.bill[0]>=0 ? "text-green-500 font-semibold" : "text-red-500 font-semibold" : "text-green-500 font-semibold"} 
               />
             </div>
 
