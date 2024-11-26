@@ -4,6 +4,10 @@ import Heading from "../components/Heading";
 import Button from "../components/Button";
 import BillModal from "./BillModal";
 import AddMemberModal from "../components/AddMemberModal";
+import SettleUpModal from "../components/SettleUpModal";
+import LeaveGroupModal from "../components/LeaveGroupModal";
+import EditTransModal from "../components/EditTransModal";
+import DeleteTransModal from "../components/DeleteTransModal";
 import Input from "../components/Input";
 
 function Bill() {
@@ -72,7 +76,10 @@ function Bill() {
   });
   const [openBill, setopenBill] = useState(false);
   const [openAddMember, setOpenAddMember] = useState(false);
-  
+  const [openSettle, setopenSettle] = useState(false);
+  const [openLeaveGroup, setopenLeaveGroup] = useState(false);
+  const [openEditBill, setopenEditBill] = useState(false);
+  const [openDeleteBill, setopenDeleteBill] = useState(false);
 
   return (
     <>
@@ -85,6 +92,38 @@ function Bill() {
             }}
           />
         )}
+        {openEditBill && (
+          <EditTransModal
+            open={openEditBill}
+            onClose={() => {
+              setopenEditBill(false);
+            }}
+          />
+        )}
+        {openDeleteBill && (
+          <DeleteTransModal
+            open={openDeleteBill}
+            onClose={() => {
+              setopenDeleteBill(false);
+            }}
+          />
+        )}
+        {openSettle && (
+          <SettleUpModal
+            open={openSettle}
+            onClose={() => {
+              setopenSettle(false);
+            }}
+          />
+        )}
+        {openLeaveGroup && (
+          <LeaveGroupModal
+            open={openLeaveGroup}
+            onClose={() => {
+              setopenLeaveGroup(false);
+            }}
+          />
+        )}
         <div className="flex justify-between lg:items-center">
           <Heading
             text="Your Bills"
@@ -93,7 +132,7 @@ function Bill() {
           />
           <div className="flex gap-4">
             <Button
-              onClick={() => setopenBill(true)}
+              onClick={() => setopenSettle(true)}
               type="submit"
               variant="filled"
               color="primary"
@@ -125,6 +164,18 @@ function Bill() {
               centerclassname="flex justify-center items-center"
             >
               Add Member
+            </Button>
+            <Button
+              onClick={() => setopenLeaveGroup(true)}
+              type="submit"
+              variant="filled"
+              color="primary"
+              buttonClassName={
+                buttonClassName + " bg-blue-500 hover:bg-blue-700"
+              }
+              centerclassname="flex justify-center items-center"
+            >
+              Leave Group
             </Button>
           </div>
         </div>
@@ -197,6 +248,30 @@ function Bill() {
                       </span>
                     </td>
                     <td className="p-4  text-right">{transaction.amount}</td>
+                    <div className="inline-flex items-center ml-4 space-x-2 gap-2">
+                      {/* Edit SVG */}
+                      <button className="hover:text-blue-500" onClick={() => setopenEditBill(true)}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          fill="currentColor"
+                          className="h-5 w-5"
+                        >
+                          <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+                        </svg>
+                      </button>
+                      {/* Delete SVG */}
+                      <button className="hover:text-red-500" onClick={() => setopenDeleteBill(true)}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 448 512"
+                          fill="currentColor"
+                          className="h-5 w-5"
+                        >
+                          <path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                        </svg>
+                      </button>
+                    </div>
                   </tr>
                 ))}
               </tbody>
