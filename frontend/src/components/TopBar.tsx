@@ -2,9 +2,17 @@ import UserImage from "../../images/UserImage.png";
 
 import SearchBar from "./SearchBar";
 import Heading from "./Heading";
+import { useGetUserQuery } from "../features/api/userSlice";
 
+type UserData = {
+  user_id: number;
+  username: string;
+  groups_joined: any[]; // Adjust type if you have a specific structure for groups
+  groups: any[]; // Adjust type if you have a specific structure for groups
+};
 //topbar
 const Topbar = (props: { isCollapse: boolean }) => {
+  const { data: userData, isLoading, error } = useGetUserQuery<UserData>();
   const topbarClass = `xs:fixed right-0 overflow-y-hidden border-b-[0.3px] border-b-[#1A1B1C] 3xl:h-[8.604316353887399vh] 2xl:h-[8.354316353887399vh] xl:h-[8.754316353887399vh] lg:h-[9.754316353887399vh] xs:h-[8.754316353887399vh] z-20  w-screen  flex lg:py-5 py-4  xs:px-4  items-center mb-10 sm:pl-24 xs:pl-20 !overflow-x-hidden  bg-[#1A1B1C] `;
   return (
     <div className="relative ">
@@ -22,8 +30,8 @@ const Topbar = (props: { isCollapse: boolean }) => {
           <img src={UserImage} className="object-contain md:w-10 xs:w-10" />
           <div className="flex flex-col xs:hidden md:inline gap-2 w-full ">
             <Heading
-              variant="subHeader"
-              text="Bill Gates"
+                variant="subHeader"
+                text={userData?.username}
               headingclassname="text-white text-base  w-full font-roboto-bold"
             />
             <Heading

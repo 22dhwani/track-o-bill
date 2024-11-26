@@ -2,9 +2,18 @@ import Footer from "../home/Footer";
 import HomeNavbar from "../home/HomeNavbar";
 import Man from "../../images/man.avif";
 import Women from "../../images/women.jpg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = Cookies.get('userToken');
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
   return (
     <div className="lg:max-h-screen border-4 lg:border-t-[20px] lg:border-b-0 lg:border-x-[20px] border-black bg-[#1A1B1C]  flex flex-col items-center !overflow-hidden">
       <HomeNavbar />

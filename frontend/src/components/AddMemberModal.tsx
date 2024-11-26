@@ -75,6 +75,9 @@
 // export default AddMemberModal;
 
 import React, { useEffect, useState } from "react";
+import { useJoinGroupMutation } from "../features/api/groupSlice";
+import { useGetUserQuery } from "../features/api/userSlice";
+import { useGroup } from "../context/GroupContext";
 
 type AddMemberModalProps = {
     isOpen: boolean;
@@ -88,8 +91,11 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
     // onAddMember,
 }) => {
     const [memberInput, setMemberInput] = useState("");
+    const [joinGroup] = useJoinGroupMutation();
+    const { groupId } = useGroup();
 
-    const handleSubmit = () => {
+
+    const handleSubmit = async () => {
         // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(memberInput.trim())) {
@@ -97,14 +103,25 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
             return;
         }
 
-        // Pass the member to the parent component
-        // onAddMember({
-        //     members: memberInput.trim(),
-        // });
+        try {
+            const result = await joinGroup({ 
+                email_id: memberInput.trim(),
+                group_id: Number(groupId)
+            }).unwrap();
 
-        // Reset the modal fields and close the modal
-        setMemberInput("");
-        onClose();
+            // Success case
+            setMemberInput("");
+            onClose();
+            window.location.reload();
+        } catch (error: any) {
+            // Error handling
+            if (error.data?.detail) {
+                alert(error.data.detail);
+            } else {
+                alert("Failed to add member. Please try again.");
+            }
+            console.error('Join group error:', error);
+        }
     };
     // Reset the input value when the modal is closed
     useEffect(() => {
@@ -112,6 +129,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
             setMemberInput("");
         }
     }, [isOpen]);
+
     if (!isOpen) return null;
 
     return (

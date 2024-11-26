@@ -4,6 +4,8 @@ import Card from "../components/Card";
 import Heading from "../components/Heading";
 import Button from "../components/Button";
 import AddGroupModal from "../components/AddGroupModal";
+import { useGetUserQuery } from "../features/api/userSlice";
+import { useGroup } from "../context/GroupContext";
 
 type Group = {
   name: string;
@@ -12,6 +14,11 @@ type Group = {
 };
 
 function Groups() {
+  const { setGroupName, setGroupId } = useGroup();
+  const { data: userData, isLoading, error } = useGetUserQuery();
+  console.log(userData);
+  //const { data: groupsData, isLoading: groupsLoading, error: groupsError } = useGetUserGroupsQuery(userData?.groups_joined[0]);
+  //console.log(groupsData);
   const [groups, setGroups] = useState<Group[]>([
     {
       name: "Friends",
@@ -36,9 +43,20 @@ function Groups() {
   const handleAddGroup = (newGroup: Group) => {
     setGroups([...groups, newGroup]);
   };
+  const findGroupPosition = (groupName: string) => {
+    return userData?.groups?.findIndex(group => group === groupName) ?? -1;
+  };
 
-  const handleCardClick = (groupName: string) => {
-    navigate(`/home/groups/${groupName}/bills`);
+  const handleCardClick = (group: string) => {
+    
+    if (!userData?.groups) return;
+    
+    const groupPosition = findGroupPosition(group);
+    console.log(groupPosition);
+    console.log(userData?.groups_joined);
+    setGroupName(group);
+    setGroupId(userData?.groups_joined[groupPosition]);
+    navigate(`/home/groups/${group}/bills`);
   };
 
   return (
@@ -62,17 +80,19 @@ function Groups() {
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {groups.map((group, index) => (
+            {userData?.groups.map((group, index) => (
               <div
                 key={index}
                 className="group-card cursor-pointer"
-                onClick={() => handleCardClick(group.name)}
+                onClick={() => {
+                  handleCardClick(group);
+                }}
               >
                 <div className="card-inner">
                   {/* Front Side */}
                   <div className="card-front shadow-md rounded-lg p-4 bg-dimGray border border-gray-300">
-                    <h2 className="text-xl font-bold mb-2">{group.name}</h2>
-                    <p className="text-white">
+                    <h2 className="text-xl font-bold mb-2">{group}</h2>
+                    {/*<p className="text-white">
                       <span className="font-medium">Total Members:</span>{" "}
                       {group.members.length}
                     </p>
@@ -85,7 +105,7 @@ function Groups() {
                       >
                         {group.owe}
                       </span>
-                    </p>
+                    </p>*/}
                   </div>
                 </div>
               </div>

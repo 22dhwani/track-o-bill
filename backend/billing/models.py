@@ -80,7 +80,7 @@ class Bill(models.Model):
 class Transaction(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(blank=True,default="as",max_length=255)
-    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="bill",blank=True)  # reference to bill
+    #bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="bill",blank=True)  # reference to bill
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="transactions")  # Foreign key to Group
     payer = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="owned_transactions")  # The user who paid
     transaction_adder = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="transaction_adder",blank=True)  # The user who added the transaction

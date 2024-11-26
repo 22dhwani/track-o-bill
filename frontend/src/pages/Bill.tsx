@@ -7,8 +7,11 @@ import AddMemberModal from "../components/AddMemberModal";
 import SettleUpModal from "../components/SettleUpModal";
 import Input from "../components/Input";
 
+
 function Bill() {
   const [searchQuery, setSearchQuery] = useState("");
+
+  
   const [transactions] = useState([
     {
       date: "Oct 28, 2022",
@@ -74,6 +77,7 @@ function Bill() {
   const [openBill, setopenBill] = useState(false);
   const [openAddMember, setOpenAddMember] = useState(false);
   const [openSettleUp, setopenSettleUp] = useState(false);
+
   return (
     <>
       <Card className=" bg-transparent min-h-screen">
