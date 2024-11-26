@@ -1,14 +1,23 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from 'js-cookie';
+import { useGroup } from '../../context/GroupContext';
 
-interface TransactionData {
-    group_id: number;
+interface Transaction {
+    transaction_id: number;
+    name: string;
+    payer: string;
     payer_id: number;
-    transaction_adder: number;
-    users_involved: number[];
+    transaction_adder_id: number;
+    transaction_adder: string;
+    users_involved_id: number[];
+    users_involved: string[];
     amount_users_own: number[];
     total_amount: number;
-    name: string;
+    date: string;
+}
+
+interface TransactionData {
+    detail: Transaction[];
 }
 
 interface TransactionResponse {
@@ -55,8 +64,23 @@ const transactionSlice = createApi({
             },
             invalidatesTags: [{ type: 'Transaction', id: 'LIST' }],
         }),
+        listAllTransactions: builder.query<TransactionData, number>({
+            query: (group_id) => ({
+                url: `/list_all_transactions/${group_id}`,
+                method: 'GET',
+            }),
+            transformResponse: (response: TransactionData) => response, 
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                } catch (error: any) {
+                    console.error('Transaction error:', error);
+                }
+            },
+        }),
     }),
+    
 });
 
-export const { useCreateTransactionMutation } = transactionSlice;
+export const { useCreateTransactionMutation, useListAllTransactionsQuery } = transactionSlice;
 export default transactionSlice; 

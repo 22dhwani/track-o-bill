@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import Cookies from 'js-cookie';
 // Define the type for the transaction data
 interface UserInfo {
     firstName: string | null; // Allow null since FormData.get can return null
@@ -14,7 +15,18 @@ interface userLogin {
 }
 const signupSlice = createApi({
     reducerPath: 'signupApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: 'http://localhost:8000',
+        // prepareHeaders: (headers) => {
+        //     // Get the auth token from cookies
+        //     const token = Cookies.get('userToken'); // Replace 'authToken' with your actual cookie name
+        //     if (token) {
+        //         headers.set('Authorization', `token ${token}`); // Set the Authorization header
+        //     }
+        //     return headers;
+        // },
+    }),
+        
     endpoints: (builder) => ({
         signUp: builder.mutation<UserInfo, UserInfo>({
             query: (userInfo) => ({

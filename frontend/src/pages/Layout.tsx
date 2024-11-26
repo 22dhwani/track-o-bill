@@ -29,12 +29,12 @@ import SearchBar from "../components/SearchBar";
 
 const Layout: React.FC = () => {
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   const token = Cookies.get('userToken');
-  //   if (!token) {
-  //     navigate('/home');
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = Cookies.get('userToken');
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
 
   const [isCollapse, setIsCollapse] = useState<boolean>(true);
   const [isMobileCollapse, setIsMobileCollapse] = useState<boolean>(true);

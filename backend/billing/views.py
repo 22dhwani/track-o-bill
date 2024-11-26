@@ -128,6 +128,7 @@ class UserView(APIView):
         user = request.user
         data = {
             "user_id":user.user_id,
+            "user_email":user.email,
             "username":user.username,
             "first_name":user.first_name,
             "last_name":user.last_name,
@@ -622,15 +623,16 @@ class ListAllTransactionsView(APIView):
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
-    def get(self,request,format=None):
-        # form = GroupForm(request.data)
-        group_id = request.data.get('group_id')
-        if group_id:
+    def get(self,request,group_id,format=None):
+        # # form = GroupForm(request.data)
+        # group_id = request.data.get('group_id')
+        # if group_id:
             
             # group_id = form.cleaned_data['group_id']
             group = get_object_or_404(Group,id=group_id)
             group_id = int(group_id)
             user = request.user
+            print(user)
             if group_id not in user.groups_joined:
                 return JsonResponse({"detail":"User should be in group"}, status = 404)
             
@@ -649,7 +651,7 @@ class ListAllTransactionsView(APIView):
                 data = {
                     "transaction_id":transaction.id,
                     "name":transaction.name,
-                    "bill_id":transaction.bill.id,
+                    # "bill_id":transaction.bill.id,
                     "payer":transaction.payer.username,
                     "payer_id":transaction.payer.user_id,
                     "transaction_adder_id":transaction.transaction_adder.user_id,
@@ -663,8 +665,8 @@ class ListAllTransactionsView(APIView):
                 all_transactions_data.append(data)
                 
             return JsonResponse({"detail":all_transactions_data}, status = 200)
-        else:
-            return JsonResponse({"detail":"Please Provide group_id as integer"}, status = 404)
+        # else:
+        #     return JsonResponse({"detail":"Please Provide group_id as integer"}, status = 404)
 
 # edit transaction
 class EditTransactionsView(APIView):
@@ -794,7 +796,7 @@ class SettleUpView(APIView):
     authentication_classes = [TokenAuthentication]
     
     # get all users and bills we have to own/borrow from them
-    def get(self,request,format=None):
+    def get(self,request,group_id,format=None):
         """
         This will view what the authenticated user owns/gains from other people.
         
@@ -807,7 +809,7 @@ class SettleUpView(APIView):
         # form = GroupForm(request.data)
         # if form.is_valid():
         #     group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
-        group_id = request.data.get('group_id')
+        # group_id = request.data.get('group_id')
         if group_id:
             
             # group_id = form.cleaned_data['group_id']

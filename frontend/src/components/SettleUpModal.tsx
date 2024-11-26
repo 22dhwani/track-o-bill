@@ -6,6 +6,8 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { MenuProps } from "@mui/material";
 import Input from "../components/Input";
+import { useGetSettleUpDataQuery } from "../features/api/settleUpSlice";
+import { useGroup } from "../context/GroupContext";
 
 interface SettleUpModalProps {
     open: boolean;
@@ -29,6 +31,9 @@ const modalStyle = {
 };
 
 const SettleUpModal: React.FC<SettleUpModalProps> = ({ open, onClose }) => {
+    const { groupId } = useGroup();
+    const { data: settleUpData, isLoading, isError, error } = useGetSettleUpDataQuery(Number(groupId));
+    console.log(settleUpData);
     const [clientName, setClientName] = useState("Freshco");
     // const [total, setTotal] = useState(22500); // Total price editable
     const [total, setTotal] = useState(0); // Total price

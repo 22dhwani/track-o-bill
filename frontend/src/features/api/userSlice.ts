@@ -62,6 +62,13 @@ export const userSlice = createApi({
             },
             transformResponse: (response: GroupMembersData) => response,
         }),
+        editUser: builder.mutation<UserData, UserData>({
+            query: (user) => ({
+                url: `user/${user.user_id}`,
+                method: 'PUT',
+                body: user,
+            }),
+        }),
     }),
 });
 

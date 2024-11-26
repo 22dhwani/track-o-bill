@@ -2,8 +2,13 @@ import Button from "./Button";
 import Heading from "./Heading";
 import HorizontalBar from "./HorizontalBar";
 import Alarm from "../../images/Alarm.svg";
+import { useLogoutMutation } from "../features/api/logoutSlice";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function LogoutModal(props: { onClose: () => void }) {
+  const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
   return (
     <div>
       <div className="flex items-top">
@@ -46,7 +51,13 @@ function LogoutModal(props: { onClose: () => void }) {
           size="small"
           color="primary"
           buttonClassName="px-6 py-2 font-semibold rounded-sm  font-family-roboto  "
-        >
+          onClick={async () => {
+            await logout();
+            props.onClose();
+            Cookies.remove('userToken');
+            navigate('/login');
+          }}
+        > 
           Yes, Logout
         </Button>
       </div>

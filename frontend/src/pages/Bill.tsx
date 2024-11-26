@@ -10,8 +10,37 @@ import EditTransModal from "../components/EditTransModal";
 import DeleteTransModal from "../components/DeleteTransModal";
 import Input from "../components/Input";
 
+import { useGroup } from "../context/GroupContext";
+import { useListAllTransactionsQuery } from "../features/api/transactionSlice";
+import { useGetSettleUpDataQuery } from "../features/api/settleUpSlice";
+
+interface Transaction {
+  transaction_id: number;
+  name: string;
+  payer: string;
+  payer_id: number;
+  transaction_adder_id: number;
+  transaction_adder: string;
+  users_involved_id: number[];
+  users_involved: string[];
+  amount_users_own: number[];
+  total_amount: string; // or number if you prefer to handle it as a number
+  date: string; // or Date if you want to parse it
+}
+interface TransactionData {
+  detail: Transaction[]; 
+}
 function Bill() {
+  
   const [searchQuery, setSearchQuery] = useState("");
+  const { groupId } = useGroup();
+  const { data: AllTransactions, isLoading, isError, error } = useListAllTransactionsQuery(Number(groupId)); 
+  const { data: settleUpData, isLoading: isLoadingSettleUp, isError: isErrorSettleUp, error: errorSettleUp } = useGetSettleUpDataQuery(Number(groupId));
+
+
+  console.log(AllTransactions);
+  console.log(settleUpData);
+
   const [transactions] = useState([
     {
       date: "Oct 28, 2022",
@@ -187,14 +216,14 @@ function Bill() {
             <div className="relative w-full lg:w-1/3">
               <Heading
                 variant="headingTitle"
-                text="You are owed $14.5 overall"
-                headingclassname=" !text-red-500  font-semibold"
+                text= { settleUpData?.bill[0] > 0 ? `You are owed $${settleUpData?.bill[0]} overall` : `You owe $${settleUpData?.bill[0]} overall`}
+                headingclassname={` !text-${settleUpData?.bill[0] > 0 ? "green" : "red"}-500  font-semibold`}
               />
             </div>
 
             {/* Filter Buttons */}
             <div className="flex space-x-2">
-              {["All", "Income", "Outcome"].map((type) => (
+              {["All", "Owed"].map((type) => (
                 <button
                   key={type}
                   onClick={() => setFilters({ ...filters, type })}
@@ -225,29 +254,28 @@ function Bill() {
                   <th className="text-left p-4 text-white">Date</th>
                   <th className="text-left p-4 text-white">User</th>
                   <th className="text-left p-4 text-white">Transaction ID</th>
-                  <th className="text-left p-4 text-white">Status</th>
                   <th className="text-right p-4 text-white">Amount</th>
                 </tr>
               </thead>
               <tbody className="mb-4">
-                {transactions.map((transaction, index) => (
+                {AllTransactions?.detail.map((transaction, index) => (
                   <tr
                     key={index}
                     className="!border-b-[1px] border-b-slate-600 py-2 text-gray-300"
                   >
-                    <td className="p-4">{transaction.date}</td>
+                    <td className="p-4">{transaction.date.split('T')[0]}</td>
                     <td className="p-4 flex items-center">
-                      <span className="font-medium">{transaction.user}</span>
+                      <span className="font-medium">{transaction.payer}</span>
                     </td>
-                    <td className="p-4">{transaction.transactionId}</td>
-                    <td className="p-4">
+                    <td className="p-4">{transaction.transaction_id}</td>
+                    {/* <td className="p-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs ${transaction.statusColor}`}
                       >
                         {transaction.status}
                       </span>
-                    </td>
-                    <td className="p-4  text-right">{transaction.amount}</td>
+                    </td> */}
+                    <td className="p-4  text-right">{transaction.total_amount}</td>
                     <div className="inline-flex items-center ml-4 space-x-2 gap-2">
                       {/* Edit SVG */}
                       <button className="hover:text-blue-500" onClick={() => setopenEditBill(true)}>

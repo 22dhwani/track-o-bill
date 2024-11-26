@@ -8,6 +8,14 @@ import Error from "../components/Error";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import TextArea from "../components/TextArea";
+import { useGetUserQuery } from "../features/api/userSlice";
+
+type UserData = {
+  first_name: string;
+  user_email: string;
+  username: string;
+  last_name: string;
+};
 
 function MyProfile() {
   // eslint-disable-next-line prefer-const
@@ -27,6 +35,11 @@ function MyProfile() {
 
   //     return errors;
   //   };
+
+
+  const { data: userData } = useGetUserQuery();
+
+  
   const user = {
     first_name: "Bill",
     email: "bill.gates@example.com",
@@ -47,14 +60,12 @@ function MyProfile() {
         headingclassname="my-3 font-roboto-semibold"
         text="EDIT PROFILE"
       />
-      <Formik<any>
+      <Formik<UserData>
         initialValues={{
-          first_name: user?.first_name,
-          email: user?.email,
-          last_name: user?.last_name,
-          mobile_number: user?.mobile_number,
-          image: undefined,
-          address: user?.address ?? "No address",
+          first_name: userData?.first_name || '',
+          user_email: userData?.user_email || '',
+          last_name: userData?.last_name || '',
+          username: userData?.username || '',
         }}
         enableReinitialize
         onSubmit={async (values) => {
@@ -133,23 +144,23 @@ function MyProfile() {
                 <Input
                   id="email"
                   disabled
-                  value={props.values.email}
+                  value={props.values.user_email}
                   className={`${inputClassName} `}
                 />
-                {props.touched.last_name && props.errors.last_name ? (
+                {props.touched.user_email && props.errors.user_email ? (
                   <Error error="Please include an email address" />
                 ) : null}
               </div>
               <div>
-                <Label label="Street Address" className="ml-1 text-white" />
+                <Label label="Username" className="ml-1 text-white" />
                 <Input
-                  id="address"
-                  value={props.values.address}
+                  id="username"
+                  value={props.values.username}
                   className={`${inputClassName} `}
                 />
               </div>
             </div>
-            <div className="grid lg:grid-cols-2 xs:grid-cols-1 gap-5 my-5">
+            {/* <div className="grid lg:grid-cols-2 xs:grid-cols-1 gap-5 my-5">
               <div>
                 <Label required label="About Me" className="ml-1 text-white" />
                 <TextArea
@@ -164,7 +175,7 @@ function MyProfile() {
                   <Error error="Please include an email address" />
                 ) : null}
               </div>
-            </div>
+            </div> */}
             <div className="grid lg:grid-cols-2 xs:grid-cols-1 gap-5 my-5"></div>
             <div className="sticky bottom-0 left-0 flex w-[100%] py-5 gap-4 border-t-[0.2px] border-t-slate-200 ">
               <div className="lg:w-1/6 flex gap-3 ">
