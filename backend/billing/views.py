@@ -129,6 +129,9 @@ class UserView(APIView):
         data = {
             "user_id":user.user_id,
             "username":user.username,
+            "first_name":user.first_name,
+            "last_name":user.last_name,
+            "image": request.build_absolute_uri(user.image.url) if user.image else None,
             "groups_joined":user.groups_joined,
             "groups":[get_object_or_404(Group,id=i).name for i in user.groups_joined]
         }
