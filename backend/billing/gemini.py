@@ -48,32 +48,27 @@ try:
         "bill_id": new_bill_id,  # Use the sequential bill ID
         "total_amount": 0,  # Default to 0
         "total_tax": 0,  # Default to 0
-        "items": [],
     }
 
+    # Parse the response text (table format)
     lines = response.text.split("\n")
     for line in lines:
-        line = line.strip()  # Clean line of extra spaces
+        # Clean line to remove excess formatting and spaces
+        line = line.strip()
 
-        # Process lines containing valid table rows
-        if "|" in line and "Item" not in line and "Price" not in line:
+        # Extract Subtotal (Total Amount)
+        if "**Subtotal**" in line:
             try:
-                parts = line.split("|")
-                item = parts[1].strip()  # Extract item name
-                price = parts[2].strip()  # Extract price
+                extracted_data["total_amount"] = float(line.split("|")[-2].strip().replace("$", "").replace("**", ""))
+            except (IndexError, ValueError):
+                print("Error extracting Subtotal.")
 
-                # Skip non-item rows like Subtotal and Total Tax
-                if item.lower() not in ["subtotal", "total tax"] and item != "":
-                    price = float(price.replace("$", "").replace("**", ""))  # Convert price to float
-                    extracted_data["items"].append({"item_name": item, "price": price})
-                elif "**Subtotal**" in line:  # Extract total amount
-                    extracted_data["total_amount"] = float(price.replace("$", "").replace("**", ""))
-                elif "**Total Tax**" in line:  # Extract total tax
-                    extracted_data["total_tax"] = float(price.replace("$", "").replace("**", ""))
-            except (IndexError, ValueError) as e:
-                print(f"Error parsing line: {line} - {e}")
-                continue
-
+        # Extract Total Tax
+        elif "**Total Tax**" in line:
+            try:
+                extracted_data["total_tax"] = float(line.split("|")[-2].strip().replace("$", "").replace("**", ""))
+            except (IndexError, ValueError):
+                print("Error extracting Total Tax.")
 
     # Ensure all required fields have valid data
     if extracted_data["total_amount"] is None:
@@ -89,15 +84,18 @@ try:
     image_file = ContentFile(bill_image.read(), name=image_name)
 
     # Save the extracted data into the Bill model
-    try:
-        bill = Bill(
-            image=image_path,
-            id=extracted_data["bill_id"],
-            amount=extracted_data["total_amount"],
-            tax=extracted_data["total_tax"],
-            items=extracted_data.get("items", []),  # Use `.get` to ensure items key exists
-        )
-        bill.save()
-        print("Bill saved successfully!")
-    except Exception as e:
-        print(f"Error saving bill: {e}")
+    bill = Bill(
+        image=image_file,  # Assuming you have an ImageField for storing the image
+        id=extracted_data["bill_id"],
+        amount=extracted_data["total_amount"],
+        tax=extracted_data["total_tax"],
+    )
+    bill.save()
+
+    # Print success message
+    print("Data successfully saved!")
+    print("Extracted Data in JSON Format:")
+    print(json.dumps(extracted_data, indent=4))
+
+except Exception as e:
+    print(f"Error: {e}")
