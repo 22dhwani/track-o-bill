@@ -2,9 +2,17 @@ from django import forms
 
 class CreateGroupForm(forms.Form):
     group_name = forms.CharField(max_length=255)
-    
-class GroupForm(forms.Form):
+    users = forms.JSONField()
+
+class AddUserGroupForm(forms.Form):
     group_id = forms.IntegerField()
+    email = forms.CharField(max_length=255)
+
+class GroupForm(forms.Form):
+    group_id = forms.IntegerField()    
+class JoinGroupForm(forms.Form):
+    group_id = forms.IntegerField()
+    email_id=forms.EmailField()
 
 class AddTransactionForm(forms.Form):
     bill_id = forms.IntegerField()

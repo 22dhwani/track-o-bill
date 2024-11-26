@@ -173,6 +173,7 @@ class CreateGroupView(APIView):
     
     # Parameters
     - `group_name (string): A name for the group.`
+    - `users (array of string): Array of strings with other user's email`
     
     # Headers 
     - `{"Authorization":"token {auth_token}"}`
@@ -187,15 +188,58 @@ class CreateGroupView(APIView):
             group = Group()
             group.name = form.cleaned_data['group_name']
             group.created_by = request.user
-            group.users  = [request.user.user_id]
+            
+            # get user mails and append to
+            users_1 = form.cleaned_data['users']
+            users = ()
+            for user in users_1:
+                users.add(AppUser.objects.get(email=user).user_id)
+            users.add(request.user.user_id) # add user id of requested user
+            group.users  = list(users)
             group.save()
             
-            # update user model to hold groups joined
-            request.user.groups_joined.append(group.id) 
-            request.user.save()
+            # update user model to add user as a group
+            for user in users:
+                u = get_object_or_404(AppUser,user_id = user)
+                u.groups_joined.append(group.id)
+                u.save()
+                
             return JsonResponse({"detail":"Group Created"}, status = 200)
         else:
             return JsonResponse({"detail":"please provide group_name variable"}, status = 404)
+
+class AddUserView(APIView): 
+    
+    """
+    This will create a group.
+    
+    # Parameters
+    - `group_id (integer): Group ID in which you want to add the user.`
+    - `email: User's email`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """
+    
+    permission_classes = [permissions.IsAuthenticated,]
+    authentication_classes = [TokenAuthentication]
+    
+    def post(self,request,format=None):
+        form = AddUserGroupForm(request.data)
+        if form.is_valid():
+            group = get_object_or_404(Group,id = form.cleaned_data['group_id'])
+            user = AppUser.objects.get(email=email)
+            group.users.append(user.user_id)
+            group.save()
+
+            email = form.cleaned_data['email']
+            user.groups_joined.append(group.id)
+            user.save()
+            
+            return JsonResponse({"detail":"User Added"}, status = 200)
+        else:
+            return JsonResponse({"detail":"please provide group_id and email variable"}, status = 404)
+
 
 # rename group
 class RenameGroupView(APIView): 
@@ -213,54 +257,115 @@ class RenameGroupView(APIView):
     authentication_classes = [TokenAuthentication]
     
     def post(self,request,format=None):
-        form1 = CreateGroupForm(request.data)
-        form2 = GroupForm(request.data)
-        if form1.is_valid() and form2.is_valid():
-            group = get_object_or_404(Group,id=form2.cleaned_data['group_id'])
-            group.name = form1.cleaned_data['group_name'] # update user model to add this group to groups joined
-            group.save()
-            return JsonResponse({"detail":"Group Renamed!"}, status = 200)
-        else:
-            return JsonResponse({"detail":"please provide group_name & integer group_id variable"}, status = 404)
+        # form1 = CreateGroupForm(request.data)
+        # form2 = GroupForm(request.data)
+        # if form1.is_valid() and form2.is_valid():
+        #     group = get_object_or_404(Group,id=form2.cleaned_data['group_id'])
+        #     group.name = form1.cleaned_data['group_name'] # update user model to add this group to groups joined
+        #     group.save()
+        #     return JsonResponse({"detail":"Group Renamed!"}, status = 200)
+        # else:
+        #     return JsonResponse({"detail":"please provide group_name & integer group_id variable"}, status = 404)
+        group_name = request.data.get('group_name')
+        group_id = request.data.get('group_id')
+
+        if not group_name or not group_id:
+            return JsonResponse({"detail": "Both group_name and group_id are required."}, status=400)
+
+        group = Group.objects.filter(id=group_id).first()
+        if not group:
+            return JsonResponse({"detail": "Group not found."}, status=404)
+
+        group.name = group_name
+        group.save()
+        return JsonResponse({"detail": "Group renamed successfully."}, status=200)
 
 # join group
+# class JoinGroupView(APIView):
+#     """
+#     This will add a user into the group.
+    
+#     # Parameters
+#     - `group_id (integer): group id of an already created group.`
+    
+#     # Headers 
+#     - `{"Authorization":"token {auth_token}"}`
+#     """ 
+#     permission_classes = [permissions.IsAuthenticated,]
+#     authentication_classes = [TokenAuthentication]
+    
+#     def post(self,request,format=None):
+#         form = GroupForm(request.data)
+#         if form.is_valid():
+            
+#             group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
+            
+#             user_id = request.user.user_id
+#             if user_id not in group.users:
+                
+#                 group.users.append(user_id)
+                
+#                 # if user was a past member, remove him from left_users
+#                 if user_id in group.left_users:
+#                     group.left_users.remove(user_id)
+#                 group.save()
+                
+#                 # update user model to add this group to groups joined
+#                 request.user.groups_joined.append(group.id) 
+#                 request.user.save()
+#                 return JsonResponse({"detail":"Group Joined"}, status = 200)
+#             else:
+#                 return JsonResponse({"detail":"Already in Group"}, status = 200)
+#         else:
+#             return JsonResponse({"detail":"please provide a integer group_id variable"}, status = 404)
 class JoinGroupView(APIView):
     """
     This will add a user into the group.
     
     # Parameters
-    - `group_id (integer): group id of an already created group.`
-    
+    - `group_id (integer): Group ID of an already created group.`
+    - `email_id (string): Email ID of the user to be added to the group.`
+
     # Headers 
     - `{"Authorization":"token {auth_token}"}`
-    """ 
-    permission_classes = [permissions.IsAuthenticated,]
+
+    """
+    permission_classes = [permissions.IsAuthenticated, ]
     authentication_classes = [TokenAuthentication]
-    
-    def post(self,request,format=None):
-        form = GroupForm(request.data)
+
+    def post(self, request, format=None):
+        
+        form = JoinGroupForm(request.data)
         if form.is_valid():
-            
-            group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
-            
-            user_id = request.user.user_id
+            # Fetch group by group_id
+            group = get_object_or_404(Group, id=form.cleaned_data['group_id'])
+
+            # Fetch the user by email_id
+            email_id = form.cleaned_data.get('email_id')
+            if not email_id:
+                return JsonResponse({"detail": "email_id is required."}, status=400)
+
+            target_user = get_object_or_404(AppUser, email=email_id)
+            user_id = target_user.user_id
+
+            # Check if user is already in the group
             if user_id not in group.users:
-                
                 group.users.append(user_id)
-                
-                # if user was a past member, remove him from left_users
+
+                # If the user was in left_users, remove them
                 if user_id in group.left_users:
                     group.left_users.remove(user_id)
                 group.save()
+
+                # Update the target user's model to add this group to groups joined
+                target_user.groups_joined.append(group.id)
+                target_user.save()
                 
-                # update user model to add this group to groups joined
-                request.user.groups_joined.append(group.id) 
-                request.user.save()
-                return JsonResponse({"detail":"Group Joined"}, status = 200)
+                return JsonResponse({"detail": f"{target_user.username} added to the group."}, status=200)
             else:
-                return JsonResponse({"detail":"Already in Group"}, status = 200)
+                return JsonResponse({"detail": f"{target_user.username} is already in the group."}, status=200)
         else:
-            return JsonResponse({"detail":"please provide a integer group_id variable"}, status = 404)
+            return JsonResponse({"detail": "Please provide valid group_id and email_id."}, status=400)
 
 # is settled up
 def is_settled_up(user,group,everyone=False):
@@ -485,13 +590,13 @@ class ListAllTransactionsView(APIView):
     authentication_classes = [TokenAuthentication]
     
     def get(self,request,format=None):
-        form = GroupForm(request.data)
-        
-        if form.is_valid():
+        # form = GroupForm(request.data)
+        group_id = request.data.get('group_id')
+        if group_id:
             
-            group_id = form.cleaned_data['group_id']
+            # group_id = form.cleaned_data['group_id']
             group = get_object_or_404(Group,id=group_id)
-            
+            group_id = int(group_id)
             user = request.user
             if group_id not in user.groups_joined:
                 return JsonResponse({"detail":"User should be in group"}, status = 404)
@@ -666,9 +771,15 @@ class SettleUpView(APIView):
         # Headers 
         - `{"Authorization":"token {auth_token}"}`
         """  
-        form = GroupForm(request.data)
-        if form.is_valid():
-            group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
+        # form = GroupForm(request.data)
+        # if form.is_valid():
+        #     group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
+        group_id = request.data.get('group_id')
+        if group_id:
+            
+            # group_id = form.cleaned_data['group_id']
+            group = get_object_or_404(Group,id=group_id)
+            group_id = int(group_id)
             current_user = request.user.user_id
             
             if current_user in group.users:
