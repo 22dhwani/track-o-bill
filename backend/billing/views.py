@@ -2,6 +2,7 @@ from .forms import *
 from .models import *
 from drf_yasg import openapi
 from django.http import JsonResponse
+from rest_framework import status 
 from django.views.generic import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,7 +12,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
-from .serializers import UserRegisterSerializer, UserLoginSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserRegisterSerializer, UserLoginSerializer, EditUserSerializer
 from .validations import custom_validation, validate_email, validate_password
 
 # Registration View
@@ -170,6 +173,7 @@ class CreateGroupView(APIView):
     
     # Parameters
     - `group_name (string): A name for the group.`
+    - `users (array of string): Array of strings with other user's email`
     
     # Headers 
     - `{"Authorization":"token {auth_token}"}`
@@ -184,15 +188,58 @@ class CreateGroupView(APIView):
             group = Group()
             group.name = form.cleaned_data['group_name']
             group.created_by = request.user
-            group.users  = [request.user.user_id]
+            
+            # get user mails and append to
+            users_1 = form.cleaned_data['users']
+            users = ()
+            for user in users_1:
+                users.add(AppUser.objects.get(email=user).user_id)
+            users.add(request.user.user_id) # add user id of requested user
+            group.users  = list(users)
             group.save()
             
-            # update user model to hold groups joined
-            request.user.groups_joined.append(group.id) 
-            request.user.save()
+            # update user model to add user as a group
+            for user in users:
+                u = get_object_or_404(AppUser,user_id = user)
+                u.groups_joined.append(group.id)
+                u.save()
+                
             return JsonResponse({"detail":"Group Created"}, status = 200)
         else:
             return JsonResponse({"detail":"please provide group_name variable"}, status = 404)
+
+class AddUserView(APIView): 
+    
+    """
+    This will create a group.
+    
+    # Parameters
+    - `group_id (integer): Group ID in which you want to add the user.`
+    - `email: User's email`
+    
+    # Headers 
+    - `{"Authorization":"token {auth_token}"}`
+    """
+    
+    permission_classes = [permissions.IsAuthenticated,]
+    authentication_classes = [TokenAuthentication]
+    
+    def post(self,request,format=None):
+        form = AddUserGroupForm(request.data)
+        if form.is_valid():
+            group = get_object_or_404(Group,id = form.cleaned_data['group_id'])
+            user = AppUser.objects.get(email=email)
+            group.users.append(user.user_id)
+            group.save()
+
+            email = form.cleaned_data['email']
+            user.groups_joined.append(group.id)
+            user.save()
+            
+            return JsonResponse({"detail":"User Added"}, status = 200)
+        else:
+            return JsonResponse({"detail":"please provide group_id and email variable"}, status = 404)
+
 
 # rename group
 class RenameGroupView(APIView): 
@@ -470,7 +517,7 @@ class AddTransactionView(APIView):
                 return JsonResponse({"detail":areUsersValid}, status = 400)
             
             
-            transaction.bill = get_object_or_404(Bill,id= 1) # TODO: Add bill_id later from form.cleaned_data['bill_id']
+            transaction.bill = get_object_or_404(Bill,id= form.cleaned_data['bill_id'])
             payer_id = form.cleaned_data['payer_id']
             transaction.payer = get_object_or_404(AppUser,user_id= payer_id)
             
@@ -799,3 +846,15 @@ class SettleUpView(APIView):
                     owning.is_settled = True
                     owning.save()
         return JsonResponse({"detail":"settled up"}, status = 200)
+
+class EditUserAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def put(self, request):
+        user = request.user
+        serializer = EditUserSerializer(user, data=request.data, partial=True, context={"request": request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User details updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
+        return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

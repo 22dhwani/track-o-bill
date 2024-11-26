@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
+from .models import AppUser
 
 UserModel = get_user_model()
 # user register validations
@@ -27,3 +28,15 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError("user not found")
         return user
+
+class EditUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppUser
+        fields = ["first_name", "last_name", "image", "email", "username"]
+
+    def validate_email(self, value):
+        # Ensure the email is unique (excluding the current user)
+        user = self.context["request"].user
+        if AppUser.objects.exclude(pk=user.pk).filter(email=value).exists():
+            raise serializers.ValidationError("This email is already in use.")
+        return value
