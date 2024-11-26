@@ -17,7 +17,7 @@ urlpatterns = [
 	path('add_transaction', AddTransactionView.as_view(), name='add_transaction'),
 	path('remove_transaction', RemoveTransactionView.as_view(), name='remove_transaction'),
     path('transaction', GetSingleTransactionView.as_view(), name='transaction'),
-	path('list_all_transactions', ListAllTransactionsView.as_view(), name='list_all_transactions'),
+	path('list_all_transactions/<int:group_id>', ListAllTransactionsView.as_view(), name='list_all_transactions'),
 	path('edit_transaction', EditTransactionsView.as_view(), name='edit_transactions'),
 	
 	path('settle_up', SettleUpView.as_view(), name='settle_up'),
