@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path, include
 from .views import *
 
 urlpatterns = [
@@ -20,4 +20,5 @@ urlpatterns = [
 	path('edit_transaction', EditTransactionsView.as_view(), name='edit_transactions'),
 	
 	path('settle_up', SettleUpView.as_view(), name='settle_up'),
+     path('edit_user', EditUserAPIView.as_view(), name='edit_user'),
 ]
