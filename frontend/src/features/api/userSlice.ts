@@ -62,12 +62,14 @@ export const userSlice = createApi({
             },
             transformResponse: (response: GroupMembersData) => response,
         }),
-        editUser: builder.mutation<UserData, UserData>({
-            query: (user) => ({
-                url: `user/${user.user_id}`,
+
+        editUserProfile: builder.mutation<any, FormData>({
+            query: (userData) => ({
+                url: '/edit_user',
                 method: 'PUT',
-                body: user,
+                body: userData,
             }),
+            invalidatesTags: ['User'],
         }),
     }),
 });
@@ -75,4 +77,4 @@ export const userSlice = createApi({
 // Export hooks for usage in functional components
 
 
-export const { useGetUserQuery, useGetUserGroupsQuery } = userSlice;
+export const { useGetUserQuery, useGetUserGroupsQuery, useEditUserProfileMutation } = userSlice;

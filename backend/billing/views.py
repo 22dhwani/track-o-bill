@@ -684,8 +684,8 @@ class GetSingleTransactionView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def get(self, request, format=None):
-        transaction_id = request.data.get('transaction_id')
+    def get(self, request,transaction_id, format=None):
+        # transaction_id = request.data.get('transaction_id')
         
         if transaction_id:
             try:
@@ -706,7 +706,7 @@ class GetSingleTransactionView(APIView):
                 data = {
                     "transaction_id": transaction.id,
                     "name": transaction.name,
-                    "bill_id": transaction.bill.id,
+                    # "bill_id": transaction.bill.id,
                     "payer": transaction.payer.username,
                     "payer_id": transaction.payer.user_id,
                     "transaction_adder_id": transaction.transaction_adder.user_id,

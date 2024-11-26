@@ -284,6 +284,7 @@ function Bill() {
                       {/* Edit SVG */}
                       <button className="hover:text-blue-500" onClick={() => {
                         setopenEditBill(true);
+                        setTransactionId(transaction.transaction_id.toString());
                       }}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +297,6 @@ function Bill() {
                       </button>
                       {/* Delete SVG */}
                       <button className="hover:text-red-500" onClick={() => {
-                        console.log(transaction.transaction_id);
                         setopenDeleteBill(true);
                         setTransactionId(transaction.transaction_id.toString());
                       }}>

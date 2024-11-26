@@ -8,7 +8,7 @@ import Error from "../components/Error";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import TextArea from "../components/TextArea";
-import { useGetUserQuery } from "../features/api/userSlice";
+import { useEditUserProfileMutation, useGetUserQuery } from "../features/api/userSlice";
 
 type UserData = {
   first_name: string;
@@ -38,7 +38,24 @@ function MyProfile() {
 
 
   const { data: userData } = useGetUserQuery();
+  const [editUserProfile] = useEditUserProfileMutation();
 
+  const handleSubmit = async (values: UserData) => {
+
+    console.log(values);
+    const formData = new FormData();
+    formData.append('first_name', values.first_name);
+    formData.append('last_name', values.last_name);
+    formData.append('user_email', values.user_email);
+    formData.append('username', values.username);
+
+    try {
+      await editUserProfile(formData);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
+  };
   
   const user = {
     first_name: "Bill",
@@ -68,9 +85,7 @@ function MyProfile() {
           username: userData?.username || '',
         }}
         enableReinitialize
-        onSubmit={async (values) => {
-          console.log(values);
-        }}
+          onSubmit={handleSubmit}
         // validate={validate}
       >
         {(props) => (

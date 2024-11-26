@@ -94,9 +94,23 @@ const transactionSlice = createApi({
                 }
             },          
         }),
+        getSingleTransaction: builder.query<TransactionData, number>({
+            query: (transaction_id) => ({
+                url: `/transaction/${transaction_id}`,
+                method: 'GET',
+            }),
+            transformResponse: (response: TransactionData) => response,
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                } catch (error) {
+                    console.error("Error fetching single transaction:", error);
+                }
+            },
+        }),     
     }),
     
 });
 
-export const { useCreateTransactionMutation, useListAllTransactionsQuery, useDeleteTransactionMutation   } = transactionSlice;
+export const { useCreateTransactionMutation, useListAllTransactionsQuery, useDeleteTransactionMutation, useGetSingleTransactionQuery } = transactionSlice;
 export default transactionSlice; 

@@ -8,7 +8,8 @@ import { MenuProps } from "@mui/material";
 import Input from "../components/Input";
 import { useGroup } from "../context/GroupContext";
 import { useGetUserGroupsQuery, useGetUserQuery } from "../features/api/userSlice";
-import { useCreateTransactionMutation } from "../features/api/transactionSlice";
+import { useCreateTransactionMutation, useGetSingleTransactionQuery } from "../features/api/transactionSlice";
+import { useTransaction } from "../context/transactionContext";
 
 interface EditTransModalProps {
     open: boolean;
@@ -45,6 +46,9 @@ const modalStyle = {
 };
 
 const EditTransModal: React.FC<EditTransModalProps> = ({ open, onClose }) => {
+    const { transactionId } = useTransaction();     
+    const { data: transactionData } = useGetSingleTransactionQuery(Number(transactionId));
+    console.log(transactionData);
     const { groupId } = useGroup();
 
     if (!groupId) {
