@@ -157,8 +157,10 @@ class GroupMembersView(APIView):
         groups = get_object_or_404(Group,id=group_id)
             
         data = {
-            "users_id":[get_object_or_404(AppUser,user_id = i).user_id for i in groups.users if i != request.user.user_id],
-            "users":[get_object_or_404(AppUser,user_id = i).username for i in groups.users if i != request.user.user_id]
+            # "users_id":[get_object_or_404(AppUser,user_id = i).user_id for i in groups.users if i != request.user.user_id],
+            # "users":[get_object_or_404(AppUser,user_id = i).username for i in groups.users if i != request.user.user_id]
+            "users_id":[get_object_or_404(AppUser,user_id = i).user_id for i in groups.users ],
+            "users":[get_object_or_404(AppUser,user_id = i).username for i in groups.users ]
         }
         return Response(data, status=status.HTTP_200_OK)
 
@@ -441,66 +443,86 @@ class AddTransactionView(APIView):
     permission_classes = [permissions.IsAuthenticated,]
     authentication_classes = [TokenAuthentication]
     
-    def post(self,request,format=None):
-        form = AddTransactionForm(request.data)
-        if form.is_valid():
-            
-            # fields
-            users_involved = form.cleaned_data['users_involved']
-            amount_users_own = form.cleaned_data['amount_users_own']
-            
-            # if not list send error
-            if type(users_involved) is not list or type(amount_users_own) is not list:
-                return JsonResponse({"detail":"give users_involved, amount_users_own as list"}, status = 400)
-            elif len(users_involved) != len(amount_users_own):
-                return JsonResponse({"detail":"give users_involved, amount_users_own as list of same length"}, status = 400)
-                        
-            transaction = Transaction()
-            transaction.group = get_object_or_404(Group,id=form.cleaned_data['group_id'])
-            areUsersValid = are_users_in_group(users_involved,transaction.group)
-            
-            # if users are not in group, remove them
-            if type(areUsersValid) == str:
-                return JsonResponse({"detail":areUsersValid}, status = 400)
-            
-            # check if adder and payer in group
-            areUsersValid = are_users_in_group([form.cleaned_data['transaction_adder'],form.cleaned_data['payer_id']],transaction.group)
-            # if users are not in group, remove them
-            if type(areUsersValid) == str:
-                return JsonResponse({"detail":areUsersValid}, status = 400)
-            
-            
-            transaction.bill = get_object_or_404(Bill,id= 1) # TODO: Add bill_id later from form.cleaned_data['bill_id']
-            payer_id = form.cleaned_data['payer_id']
-            transaction.payer = get_object_or_404(AppUser,user_id= payer_id)
-            
-            transaction.transaction_adder = get_object_or_404(AppUser,user_id= form.cleaned_data['transaction_adder'])
-            transaction.users_involved = users_involved
-            transaction.amount_users_own = amount_users_own
-            transaction.total_amount = form.cleaned_data['total_amount']  # Total amount of the transaction
-            transaction.name = form.cleaned_data['name']
-            
-            sum_ = 0
-            for i in amount_users_own:
-                sum_+=i
-            if round(transaction.total_amount,2) == round(sum_,2):
-                transaction.save()
+    def post(self, request, format=None):
+
+        try:
+            form = AddTransactionForm(request.data)
+            print("entered")
+            if form.is_valid():
+                print("entered 2")
+                # fields
+                users_involved = form.cleaned_data['users_involved']
+                amount_users_own = form.cleaned_data['amount_users_own']
+                
+                # if not list send error
+                if type(users_involved) is not list or type(amount_users_own) is not list:
+                    return JsonResponse({"detail": "give users_involved, amount_users_own as list"}, status=400)
+                elif len(users_involved) != len(amount_users_own):
+                    return JsonResponse({"detail": "give users_involved, amount_users_own as list of same length"}, status=400)
+                            
+                transaction = Transaction()
+                transaction.group = get_object_or_404(Group, id=form.cleaned_data['group_id'])
+                areUsersValid = are_users_in_group(users_involved, transaction.group)
+                
+                # if users are not in group, remove them
+                if type(areUsersValid) == str:
+                    return JsonResponse({"detail": areUsersValid}, status=400)
+                
+                # check if adder and payer in group
+                areUsersValid = are_users_in_group([form.cleaned_data['transaction_adder'], form.cleaned_data['payer_id']], transaction.group)
+                # if users are not in group, remove them
+                if type(areUsersValid) == str:
+                    return JsonResponse({"detail": areUsersValid}, status=400)
+                
+                # transaction.bill = get_object_or_404(Bill, id=1)  # TODO: Add bill_id later from form.cleaned_data['bill_id']
+                payer_id = form.cleaned_data['payer_id']
+                # last_transaction = Transaction.objects.order_by('-id').first()  # Get the last transaction
+                # print(last_transaction)
+                # if last_transaction:
+                #     next_bill_id = last_transaction.bill.id + 1  # Increment the last bill ID
+                # else:
+                #     next_bill_id = 1  # Start with 1 if no transactions exist
+                
+                # transaction.bill = next_bill_id # Use the incremented bill ID
+                #print("bill",transaction.bill)
+                transaction.transaction_adder = get_object_or_404(AppUser, user_id=form.cleaned_data['transaction_adder'])
+                print("transaction_adder",transaction.transaction_adder)
+                transaction.users_involved = users_involved
+                print("users_involved",transaction.users_involved)
+                transaction.amount_users_own = amount_users_own
+                print("amount_users_own",transaction.amount_users_own)
+                transaction.total_amount = form.cleaned_data['total_amount']  # Total amount of the transaction
+                print("total_amount",transaction.total_amount)
+                transaction.name = form.cleaned_data['name']
+                print("name",transaction.name)
+                transaction.payer = get_object_or_404(AppUser, user_id=payer_id)
+                print("payer",transaction.payer)
+                
+                sum_ = 0
+                for i in amount_users_own:
+                    sum_ += i
+                if round(transaction.total_amount, 2) == round(sum_, 2):
+                    transaction.save()
+                    print("transaction saved")
+                else:
+                    return JsonResponse({"detail": "amount_users_own's sum and total_amount are not equal"}, status=400)
+                
+                # for each user involved, make a owing row
+                for index, value in enumerate(users_involved):
+                    if payer_id != value:
+                        owing = Owning()
+                        owing.transaction = transaction
+                        owing.owner = transaction.payer
+                        owing.borrower = get_object_or_404(AppUser, user_id=value)
+                        owing.amount = amount_users_own[index]
+                        owing.save()
+                
+                return JsonResponse({"detail": "Transaction Added"}, status=200)
             else:
-                return JsonResponse({"detail":"amount_users_own's sum and total_amount are not equal"}, status = 400)
-            
-            # for each user involved, make a owing row
-            for index,value in enumerate(users_involved):
-                if payer_id != value:
-                    owing = Owning()
-                    owing.transaction = transaction
-                    owing.owner = transaction.payer
-                    owing.borrower = get_object_or_404(AppUser,user_id = value)
-                    owing.amount = amount_users_own[index]
-                    owing.save()
-            
-            return JsonResponse({"detail":"Transaction Added"}, status = 200)
-        else:
-            return JsonResponse({"detail":"Please Provide bill_id, group_id, payer_id, transaction_adder as integers, users_involved, amount_users_own as lists and total_amount as a decimal field"}, status = 404)
+                return JsonResponse({"detail": "Please Provide bill_id, group_id, payer_id, transaction_adder as integers, users_involved, amount_users_own as lists and total_amount as a decimal field"}, status=404)
+        
+        except Exception as e:
+            return JsonResponse({"detail": str(e)}, status=500)  # Catch any unexpected errors
 
 # remove transactions
 class RemoveTransactionView(APIView):

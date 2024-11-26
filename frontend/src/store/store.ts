@@ -4,6 +4,7 @@ import rootReducer from './rootReducer';
 import signupSlice from '../features/api/signupSlice';
 import groupSlice from '../features/api/groupSlice';
 import { userSlice } from '../features/api/userSlice';
+import transactionSlice from '../features/api/transactionSlice';
 
 // Create the store
 const store = configureStore({
@@ -11,7 +12,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(signupSlice.middleware, groupSlice.middleware, userSlice.middleware),
+    }).concat(signupSlice.middleware, groupSlice.middleware, userSlice.middleware, transactionSlice.middleware),
   devTools: process.env.NODE_ENV !== 'production',
 });
 

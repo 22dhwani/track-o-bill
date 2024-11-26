@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 type GroupContextType = {
     groupName: string;
@@ -10,8 +10,22 @@ type GroupContextType = {
 const GroupContext = createContext<GroupContextType | undefined>(undefined);
 
 export const GroupProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [groupName, setGroupName] = useState<string>("");
-    const [groupId, setGroupId] = useState<string>("");
+    const [groupName, setGroupName] = useState<string>(() => {
+        // Initialize state from localStorage
+        return localStorage.getItem('groupName') || "";
+    });
+    useEffect(() => {
+        // Save groupName to localStorage whenever it changes
+        localStorage.setItem('groupName', groupName);
+    }, [groupName]);
+    const [groupId, setGroupId] = useState<string>(() => {
+        // Initialize state from localStorage
+        return localStorage.getItem('groupId') || "";
+    });
+    useEffect(() => {
+        // Save groupId to localStorage whenever it changes
+        localStorage.setItem('groupId', groupId);
+    }, [groupId]);      
 
     return (
         <GroupContext.Provider value={{ groupName, groupId, setGroupName, setGroupId }}>

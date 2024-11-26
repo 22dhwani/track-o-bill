@@ -10,7 +10,7 @@ class JoinGroupForm(forms.Form):
     email_id=forms.EmailField()
 
 class AddTransactionForm(forms.Form):
-    bill_id = forms.IntegerField()
+    # bill_id = forms.IntegerField()
     group_id = forms.IntegerField()
     payer_id = forms.IntegerField()
     transaction_adder = forms.IntegerField() # The user who added the transaction

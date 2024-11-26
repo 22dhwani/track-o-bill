@@ -10,6 +10,12 @@ interface UserData {
     groups_joined: Array<any>; // Adjust the type based on the structure of the group objects
     groups: Array<any>; // Adjust the type based on the structure of the group objects
   }
+
+interface GroupMembersData {
+    users_id: number[];    // Array of user IDs (excluding current user)
+    users: string[];       // Array of usernames (excluding current user)
+}
+
 // Define a service using a base URL and expected endpoints
 export const userSlice = createApi({
     reducerPath: 'userSlice',
@@ -41,7 +47,7 @@ export const userSlice = createApi({
             },
             transformResponse: (response: UserData) => response,
         }),
-        getUserGroups: builder.query<UserData, void>({
+        getUserGroups: builder.query<GroupMembersData, void>({
             query: (group_id) => `user/${group_id}`,
             // Lifecycle methods
             onQueryStarted: async (_, { queryFulfilled }) => {
@@ -54,7 +60,7 @@ export const userSlice = createApi({
                     console.error('Failed to fetch user:', error);
                 }
             },
-            transformResponse: (response: UserData) => response,
+            transformResponse: (response: GroupMembersData) => response,
         }),
     }),
 });
