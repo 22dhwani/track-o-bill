@@ -8,12 +8,18 @@ import { MenuProps } from "@mui/material";
 import Input from "../components/Input";
 import { useGetSettleUpDataQuery } from "../features/api/settleUpSlice";
 import { useGroup } from "../context/GroupContext";
+import { useSettleUpMutation } from "../features/api/settleUpSlice";
 
 interface SettleUpModalProps {
     open: boolean;
     onClose: () => void;
 }
 
+interface SettleUpData {
+    users: string[];
+    user_ids: number[];
+    bill: number[];
+}
 
 const modalStyle = {
     position: "absolute" as "absolute",
@@ -33,14 +39,33 @@ const modalStyle = {
 const SettleUpModal: React.FC<SettleUpModalProps> = ({ open, onClose }) => {
     const { groupId } = useGroup();
     const { data: settleUpData, isLoading, isError, error } = useGetSettleUpDataQuery(Number(groupId));
+    const [settleUp, { isLoading: isSettleUpLoading, isError: isSettleUpError, error: settleUpError }] = useSettleUpMutation();
+
     console.log(settleUpData);
     const [clientName, setClientName] = useState("Freshco");
     // const [total, setTotal] = useState(22500); // Total price editable
     const [total, setTotal] = useState(0); // Total price
 
-    const [selectedFrom, setSelectedFrom] = useState<string[]>([
-        "Dhrumil",
-    ]);
+    const [selectedFrom, setSelectedFrom] = useState<string[]>(settleUpData?.users || []);
+    const [selectedTotal, setSelectedTotal] = useState<number>(settleUpData?.bill[0] || 0);
+
+
+    const handleSubmit = async () => {
+        console.log(selectedFrom, selectedTotal);
+        const userIndex = settleUpData?.users.indexOf(selectedFrom[0]);
+        const user_id = settleUpData?.user_ids[userIndex];
+        
+        try {
+            await settleUp({ // Await the settleUp call
+                group_id: groupId,
+                user_id: user_id,
+            }).unwrap(); // Use unwrap to handle errors
+            onClose();
+            window.location.reload();
+        } catch (error) {
+            console.error("Error settling up:", error); // Log the error
+        }    
+    }
 
     // Custom MenuProps to apply white text
     const customMenuProps: Partial<MenuProps> = {
@@ -90,17 +115,20 @@ const SettleUpModal: React.FC<SettleUpModalProps> = ({ open, onClose }) => {
                     <div className="flex space-x-4">
                         <Select
                             value={selectedFrom}
-                            onChange={(e: any) => setSelectedFrom(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value as string;
+                                setSelectedFrom([value]);  // Wrap in array since state is string[]
+                                setSelectedTotal(settleUpData?.bill[settleUpData?.users.indexOf(value)] || 0);
+                            }}
                             renderValue={(selected) => selected}
                             className="flex-1 !text-white bg-black border-white border-[0.5px]"
                             MenuProps={customMenuProps} // Apply custom MenuProps
                         >
-                            <MenuItem value="Dhrumil" className="text-white">
-                                Dhrumil
-                            </MenuItem>
-                            <MenuItem value="Smit" className="text-white">
-                                Smit
-                            </MenuItem>
+                            {settleUpData?.users.map((user: string) => (
+                                <MenuItem key={user} value={user} className="text-white">
+                                    {user}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </div>
                 </section>
@@ -112,7 +140,7 @@ const SettleUpModal: React.FC<SettleUpModalProps> = ({ open, onClose }) => {
                     <h2 className="text-sm font-medium text-white">Total Price</h2>
                     <input
                         type="number"
-                        value="20"
+                        value={settleUpData?.bill[0]}
                         readOnly // Make input read-only
                         className="w-full p-2 border rounded-md bg-black text-white placeholder:text-white"
                     />
@@ -127,7 +155,7 @@ const SettleUpModal: React.FC<SettleUpModalProps> = ({ open, onClose }) => {
                     </button>
                     <button
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    // onClick={handleSubmit}
+                    onClick={handleSubmit}
                     >
                         Settle
                     </button>

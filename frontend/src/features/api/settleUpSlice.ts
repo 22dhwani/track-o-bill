@@ -23,11 +23,26 @@ const settleUpSlice = createApi({
                 }
             },
         }),
+        settleUp: builder.mutation({
+            query: (data) => ({
+                url: `/settle_up`,
+                method: 'POST',
+                body: data,
+            }),
+            transformResponse: (response: any) => response, 
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                } catch (error) {
+                    console.error('Error during settle up:', error);
+                }
+            },
+        }),
     }),
 });
 
 // Export the auto-generated hook for the query
-export const { useGetSettleUpDataQuery } = settleUpSlice;
+export const { useGetSettleUpDataQuery, useSettleUpMutation } = settleUpSlice;
 
 // Export the reducer to be included in the store
 export default settleUpSlice;
