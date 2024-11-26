@@ -188,26 +188,33 @@ class CreateGroupView(APIView):
     authentication_classes = [TokenAuthentication]
     
     def post(self,request,format=None):
+
+        print(request.data)
         form = CreateGroupForm(request.data)
         if form.is_valid():
             group = Group()
             group.name = form.cleaned_data['group_name']
             group.created_by = request.user
+            group.users  = [request.user.user_id]
             
             # get user mails and append to
-            users_1 = form.cleaned_data['users']
-            users = ()
-            for user in users_1:
-                users.add(AppUser.objects.get(email=user).user_id)
-            users.add(request.user.user_id) # add user id of requested user
-            group.users  = list(users)
+            # users_1 = form.cleaned_data['users']
+            # users = ()
+            # for user in users_1:
+            #     users.add(AppUser.objects.get(email=user).user_id)
+            # users.add(request.user.user_id) # add user id of requested user
+            # group.users  = list(users)
             group.save()
             
+             # update user model to hold groups joined
+            request.user.groups_joined.append(group.id) 
+            request.user.save()
+            
             # update user model to add user as a group
-            for user in users:
-                u = get_object_or_404(AppUser,user_id = user)
-                u.groups_joined.append(group.id)
-                u.save()
+            # for user in users:
+            #     u = get_object_or_404(AppUser,user_id = user)
+            #     u.groups_joined.append(group.id)
+            #     u.save()
                 
             return JsonResponse({"detail":"Group Created"}, status = 200)
         else:
@@ -271,6 +278,7 @@ class RenameGroupView(APIView):
         #     return JsonResponse({"detail":"Group Renamed!"}, status = 200)
         # else:
         #     return JsonResponse({"detail":"please provide group_name & integer group_id variable"}, status = 404)
+        
         group_name = request.data.get('group_name')
         group_id = request.data.get('group_id')
 
