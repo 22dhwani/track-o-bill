@@ -1,48 +1,49 @@
-# Track-o-Bill Project
+# 💸 Track-o-Bill — Smart Expense Tracking & Management Platform
 
-## Overview
+Track-o-Bill is a **full-stack expense management web application** that simplifies how groups and individuals **track, split, and settle shared expenses**.  
+Built with **React.js + Tailwind CSS** on the frontend and a **Django REST API** backend, fully containerized using **Docker** for seamless deployment and scalability.
 
-Track-o-Bill is a web application designed for tracking and managing expenses. This project includes a frontend developed with React and a backend API to handle data storage and retrieval.
+---
 
-## Project Structure
+## 🚀 Key Features
 
-The project consists of two main components:
+- 💰 **Expense Tracking:** Log, split, and manage group or individual expenses in real time.  
+- 👥 **Group Management:** Create, join, and manage shared groups or events effortlessly.  
+- ⚡ **Smart Settlements:** Automatically calculate who owes whom and how much.  
+- 📱 **Responsive UI:** Built with **React.js**, **Context API**, and **Tailwind CSS** for a clean, dynamic interface.  
+- 🐍 **Robust Backend:** Powered by **Django REST Framework**, ensuring secure API endpoints and efficient data handling.  
+- 🐳 **Containerized Deployment:** Uses **Docker** to streamline local development and deployment across environments.  
+- 🔐 **User Authentication:** JWT-based secure login, signup, and session management.  
+- 🧩 **Scalable Architecture:** Designed for easy extension — add analytics, notifications, or payment gateways effortlessly.
 
-- **Frontend**: Located in the `frontend` directory. This is where the user interface is developed using React and Vite.
-- **Backend**: The backend API is responsible for handling requests and managing the database.
+---
 
-## Prerequisites
+## 🧱 Project Structure
 
-Before running the project, ensure you have the following installed:
+track-o-bill/
+│
+├── frontend/ # React.js + Vite + Tailwind CSS
+│ ├── src/
+│ ├── public/
+│ └── package.json
+│
+├── backend/ # Django REST Framework + PostgreSQL
+│ ├── manage.py
+│ ├── trackobill_api/
+│ └── requirements.txt
 
-- [Docker](https://docs.docker.com/get-docker/) (for containerized deployment)
 
-## Setup Instructions
+---
 
-### 1. Clone the Repository
+## 🧠 Architecture Overview
 
-```bash
-git clone https://github.com/damletanmay/track-o-bill.git
-cd track-o-bill
-```
+```mermaid
+graph TD;
+    User[Frontend - React.js (Vite + Tailwind)] --> API[Django REST API]
+    API --> DB[(PostgreSQL Database)]
+    API --> Docker[Docker Containers]
+    Docker --> Deployment[Cloud / Local Deployment]
 
-### 2. Setting Up the Frontend
-
-Navigate to the `frontend` directory and follow the instructions in the `frontend/README.md` to deploy the frontend application.
-
-### 3. Setting Up the Backend
-
-Navigate to the `backend` directory and follow the instructions in the `backend/README.md` to deploy the backend application.
-
-## Contributing
-
-Contributions are welcome! Please follow the standard Git workflow:
-
-1. Fork the repository.
-2. Create a new branch for your feature or fix.
-3. Make your changes and commit them.
-4. Submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+│
+├── docker-compose.yml # Docker orchestration for full-stack
+└── README.md # Project documentation
