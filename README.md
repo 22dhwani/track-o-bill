@@ -33,17 +33,11 @@ track-o-bill/
 │ └── requirements.txt
 
 
----
-
 ## 🧠 Architecture Overview
 
 ```mermaid
-graph TD;
-    User[Frontend - React.js (Vite + Tailwind)] --> API[Django REST API]
-    API --> DB[(PostgreSQL Database)]
-    API --> Docker[Docker Containers]
-    Docker --> Deployment[Cloud / Local Deployment]
-
-│
-├── docker-compose.yml # Docker orchestration for full-stack
-└── README.md # Project documentation
+graph TD
+    A[Frontend: React + Vite + Tailwind] --> B[Backend: Django REST API]
+    B --> C[(PostgreSQL Database)]
+    B --> D[Docker Containers]
+    D --> E[Deployment: Cloud / Local]
